@@ -1,4 +1,4 @@
-# cdp-perf-test-suite-template
+# epr-backend-performance-tests
 
 A JMeter based test runner for the CDP Platform.
 
