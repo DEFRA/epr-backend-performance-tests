@@ -15,12 +15,12 @@
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
-          <stringProp name="LoopController.loops">100</stringProp>
+          <stringProp name="LoopController.loops">50</stringProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Healthcheck HTTP Request" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Healthcheck HTTP Request">
           <stringProp name="HTTPSampler.domain">epr-backend.${__P(env)}.cdp-int.defra.cloud</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.path">/health</stringProp>
@@ -44,7 +44,7 @@
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Organisation Details HTTP Request" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Organisation Details HTTP Request">
           <stringProp name="HTTPSampler.domain">epr-backend.${__P(env)}.cdp-int.defra.cloud</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.path">/v1/apply/organisation</stringProp>
@@ -1038,6 +1038,19 @@
             <intProp name="Assertion.test_type">2</intProp>
           </ResponseAssertion>
           <hashTree/>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="orgId JSON Extractor" enabled="true">
+            <stringProp name="JSONPostProcessor.referenceNames">orgId</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.orgId</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="refNo JSON Extractor" enabled="true">
+            <stringProp name="JSONPostProcessor.referenceNames">refNo</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.referenceNumber</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+            <stringProp name="Scope.variable"></stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
         </hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Registration Details HTTP Request" enabled="true">
           <stringProp name="HTTPSampler.domain">epr-backend.${__P(env)}.cdp-int.defra.cloud</stringProp>
@@ -1132,7 +1145,7 @@
               &quot;schema&quot;: {&#xd;
                 &quot;min&quot;: 6,&#xd;
                 &quot;max&quot;: 6,&#xd;
-                &quot;regex&quot;: &quot;\\d{6}&quot;&#xd;
+                &quot;regex&quot;: &quot;\\\\d{6}&quot;&#xd;
               },&#xd;
               &quot;id&quot;: &quot;54ba8e2e-3566-4cfa-90f2-b44e5b2990fa&quot;&#xd;
             },&#xd;
@@ -1905,8 +1918,8 @@
   &quot;data&quot;: {&#xd;
     &quot;main&quot;: {&#xd;
       &quot;LoZFoG&quot;: &quot;true&quot;,&#xd;
-      &quot;QnSRcX&quot;: &quot;500000&quot;,&#xd;
-      &quot;RIXIzA&quot;: &quot;68a66ec3dabf09f3e442b2da&quot;,&#xd;
+      &quot;QnSRcX&quot;: &quot;${orgId}&quot;,&#xd;
+      &quot;RIXIzA&quot;: &quot;${refNo}&quot;,&#xd;
       &quot;CzNRVZ&quot;: &quot;Alice&quot;,&#xd;
       &quot;xpDUqn&quot;: &quot;alice@foo.com&quot;,&#xd;
       &quot;ZgTfLO&quot;: &quot;+44987654321&quot;,&#xd;
@@ -2069,7 +2082,7 @@
               &quot;schema&quot;: {&#xd;
                 &quot;min&quot;: 6,&#xd;
                 &quot;max&quot;: 6,&#xd;
-                &quot;regex&quot;: &quot;\\d{6}&quot;&#xd;
+                &quot;regex&quot;: &quot;\\\\d{6}&quot;&#xd;
               },&#xd;
               &quot;id&quot;: &quot;adfc1077-4877-4447-a756-0e1fb375bfb3&quot;&#xd;
             },&#xd;
@@ -2787,8 +2800,8 @@
   &quot;data&quot;: {&#xd;
     &quot;main&quot;: {&#xd;
       &quot;NPFtSF&quot;: &quot;true&quot;,&#xd;
-      &quot;Ooierc&quot;: &quot;500000&quot;,&#xd;
-      &quot;MyWHms&quot;: &quot;68a66ec3dabf09f3e442b2da&quot;,&#xd;
+      &quot;Ooierc&quot;: &quot;${orgId}&quot;,&#xd;
+      &quot;MyWHms&quot;: &quot;${refNo}&quot;,&#xd;
       &quot;qkCaCh&quot;: &quot;Aluminium (R4)&quot;,&#xd;
       &quot;XKWebf&quot;: &quot;Over 10,000 tonnes&quot;,&#xd;
       &quot;yzvIcu&quot;: &quot;60&quot;,&#xd;
