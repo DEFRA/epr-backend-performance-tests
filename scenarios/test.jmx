@@ -5,8 +5,6 @@
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
         <collectionProp name="Arguments.arguments"/>
       </elementProp>
-      <boolProp name="TestPlan.functional_mode">false</boolProp>
-      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
     </TestPlan>
     <hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group">
@@ -20,6 +18,157 @@
         </elementProp>
       </ThreadGroup>
       <hashTree>
+        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="DataGenerator">
+          <stringProp name="BeanShellSampler.query">import java.util.Random;
+import java.util.UUID;
+
+String[] firstNames = {&quot;James&quot;, &quot;Oliver&quot;, &quot;George&quot;, &quot;Noah&quot;, &quot;Arthur&quot;, &quot;Muhammad&quot;, &quot;Leo&quot;, &quot;Harry&quot;, &quot;Oscar&quot;, &quot;Archie&quot;,
+&quot;Amelia&quot;, &quot;Olivia&quot;, &quot;Isla&quot;, &quot;Ava&quot;, &quot;Mia&quot;, &quot;Grace&quot;, &quot;Sophia&quot;, &quot;Freya&quot;, &quot;Charlotte&quot;, &quot;Emily&quot;};
+
+String[] lastNames = {&quot;Smith&quot;, &quot;Jones&quot;, &quot;Taylor&quot;, &quot;Williams&quot;, &quot;Brown&quot;, &quot;Davies&quot;, &quot;Evans&quot;, &quot;Wilson&quot;, &quot;Thomas&quot;, &quot;Roberts&quot;,&quot;Johnson&quot;, &quot;Lewis&quot;, &quot;Walker&quot;, &quot;Robinson&quot;, &quot;Wood&quot;, &quot;Thompson&quot;, &quot;White&quot;, &quot;Watson&quot;, &quot;Jackson&quot;, &quot;Wright&quot;};
+
+
+String[] addresses = {
+    &quot;42 Victoria Street, London, SW1H 0NP&quot;,
+    &quot;15 Church Lane, Manchester, M1 2AB&quot;,
+    &quot;78 High Street, Birmingham, B2 4QA&quot;,
+    &quot;23 Mill Road, Edinburgh, EH4 3BB&quot;,
+    &quot;91 Oak Avenue, Bristol, BS1 6XY&quot;,
+    &quot;56 Kings Road, Liverpool, L1 9AA&quot;,
+    &quot;12 Station Road, Cardiff, CF10 1EP&quot;,
+    &quot;67 Park Lane, Leeds, LS1 2TW&quot;,
+    &quot;34 Queen&apos;s Drive, Glasgow, G12 0AA&quot;,
+    &quot;89 Castle Street, Newcastle, NE1 1RQ&quot;
+};
+
+String[] jobTitles = {
+    &quot;Software Developer&quot;, &quot;Marketing Manager&quot;, &quot;Sales Assistant&quot;, &quot;Project Manager&quot;, &quot;Data Analyst&quot;,
+    &quot;HR Coordinator&quot;, &quot;Financial Advisor&quot;, &quot;Graphic Designer&quot;, &quot;Operations Manager&quot;, &quot;Business Analyst&quot;,
+    &quot;Customer Service Representative&quot;, &quot;IT Support Specialist&quot;, &quot;Account Executive&quot;, &quot;Product Manager&quot;,
+    &quot;Quality Assurance Tester&quot;, &quot;Administrative Assistant&quot;, &quot;Research Scientist&quot;, &quot;Social Media Manager&quot;,
+    &quot;Network Engineer&quot;, &quot;Content Writer&quot;, &quot;Legal Assistant&quot;, &quot;Procurement Officer&quot;, &quot;Training Coordinator&quot;,
+    &quot;Systems Administrator&quot;, &quot;UX Designer&quot;
+};
+
+String[] mobilePrefixes = {&quot;07700&quot;, &quot;07701&quot;, &quot;07702&quot;, &quot;07703&quot;, &quot;07704&quot;, &quot;07705&quot;, &quot;07706&quot;, &quot;07707&quot;, &quot;07708&quot;, &quot;07709&quot;};
+
+String[] emailDomains = {&quot;fakeemail.com&quot;, &quot;defratesters.co.uk&quot;, &quot;morefaketesting.co.uk&quot;, &quot;defraperftest.com&quot;, &quot;defragovtest.com&quot;, &quot;testingfakeemails.com&quot;};
+
+String[] roles = {&quot;Reprocessor&quot;, &quot;Exporter&quot;, &quot;Reprocessor and exporter&quot;};
+
+String[] nations = {&quot;England&quot;, &quot;Northern Ireland&quot;, &quot;Scotland&quot;, &quot;Wales&quot;};
+
+String[] companies = {&quot;Testers Limited&quot;, &quot;Garbage Extinguishers Limited&quot;, &quot;Recyclers Limited&quot;, &quot;Exportations Limited&quot;, &quot;Acme Limited&quot;, &quot;Throwaway Limited&quot;, &quot;Producers Limited&quot;, &quot;Consumers Limited&quot;};
+
+
+String[] materials = {  &quot;Aluminium (R4)&quot;,
+  &quot;Fibre-based composite material (R3)&quot;,
+  &quot;Glass (R5)&quot;,
+  &quot;Paper or board (R3)&quot;,
+  &quot;Plastic (R3)&quot;,
+  &quot;Steel (R4)&quot;,
+  &quot;Wood (R3)&quot;
+};
+
+String[] tonnageBands = {
+  &quot;Up to 500 tonnes&quot;,
+  &quot;Up to 5,000 tonnes&quot;,
+  &quot;Up to 10,000 tonnes&quot;,
+  &quot;Over 10,000 tonnes&quot;
+};
+
+String[] suppliers = {
+  &quot;local council collections&quot;,
+  &quot;direct from producer&quot;,
+  &quot;material recovery facility&quot;
+};
+
+String[] permitTypes = {
+  &quot;Waste management licence or environmental permit&quot;,
+  &quot;Installation permit or Pollution Prevention and Control (PPC) permit&quot;,
+  &quot;Waste exemption&quot;
+};
+
+Random rand = new Random();
+
+String firstName = firstNames[rand.nextInt(firstNames.length)];
+String lastName = lastNames[rand.nextInt(lastNames.length)];
+String fullAddress = addresses[rand.nextInt(addresses.length)];
+String jobTitle = jobTitles[rand.nextInt(jobTitles.length)];
+
+String company = companies[rand.nextInt(companies.length)];
+
+String role = roles[rand.nextInt(roles.length)];
+
+String material = materials[rand.nextInt(materials.length)];
+
+String tonnageBand = tonnageBands[rand.nextInt(tonnageBands.length)];
+
+String supplier = suppliers[rand.nextInt(suppliers.length)];
+String permitType = permitTypes[rand.nextInt(permitTypes.length)];
+
+String mobilePrefix = mobilePrefixes[rand.nextInt(mobilePrefixes.length)];
+int mobileNum = rand.nextInt(900000) + 100000;
+String mobileNumber = mobilePrefix + mobileNum;
+
+String emailDomain = emailDomains[rand.nextInt(emailDomains.length)];
+int emailNum = rand.nextInt(99) + 1;
+String email = firstName.toLowerCase() + &quot;.&quot; + lastName.toLowerCase() + emailNum + &quot;@&quot; + emailDomain;
+
+
+int randomInt = rand.nextInt(nations.length);
+
+String nationsString = nations[0];
+for (int i = 1; i &lt; randomInt &amp;&amp; i &lt; nations.length; i++) {
+    nationsString += &quot;, &quot; + nations[i];
+}
+
+String wasteRegNumber = &quot;CBDU&quot; + (rand.nextInt(900000) + 100000);
+
+long permitNumber = rand.nextLong(9000000000L) + 1000000000L;
+String permitNo = &quot;&quot; + permitNumber;
+
+
+String reproPercentage = &quot;&quot; + rand.nextInt(100);
+String priceSupportPercentage = &quot;&quot; + rand.nextInt(100); 
+String businessSupportPercentage = &quot;&quot; + rand.nextInt(100);
+String commsPercentage = &quot;&quot; + rand.nextInt(100);
+String developingNewMarketsPercentage = &quot;&quot; + rand.nextInt(100);
+String developingNewUsesPercentage = &quot;&quot; + rand.nextInt(100);
+String otherCategoriesPercentage = &quot;&quot; + rand.nextInt(100);
+
+String uuid1 = UUID.randomUUID().toString();
+String uuid2 = UUID.randomUUID().toString();
+
+vars.put(&quot;firstName&quot;, firstName);
+vars.put(&quot;lastName&quot;, lastName);
+vars.put(&quot;fullName&quot;, firstName + &quot; &quot; + lastName);
+vars.put(&quot;email&quot;, email);
+vars.put(&quot;telephone&quot;, mobileNumber);
+vars.put(&quot;address&quot;, fullAddress);
+vars.put(&quot;jobTitle&quot;, jobTitle);
+vars.put(&quot;city&quot;, fullAddress.split(&quot;, &quot;)[1]);
+vars.put(&quot;role&quot;, role);
+vars.put(&quot;nations&quot;, nationsString);
+vars.put(&quot;company&quot;, company);
+vars.put(&quot;material&quot;, material);
+vars.put(&quot;tonnageBand&quot;, tonnageBand);
+vars.put(&quot;supplier&quot;, supplier);
+vars.put(&quot;permitType&quot;, permitType);
+vars.put(&quot;wasteRegNumber&quot;, wasteRegNumber);
+vars.put(&quot;permitNumber&quot;, permitNo);
+vars.put(&quot;reproPercentage&quot;, reproPercentage);
+vars.put(&quot;priceSupportPercentage&quot;, priceSupportPercentage);
+vars.put(&quot;businessSupportPercentage&quot;, businessSupportPercentage);
+vars.put(&quot;commsPercentage&quot;, commsPercentage);
+vars.put(&quot;developingNewMarketsPercentage&quot;, developingNewMarketsPercentage);
+vars.put(&quot;developingNewUsesPercentage&quot;, developingNewUsesPercentage);
+vars.put(&quot;otherCategoriesPercentage&quot;, otherCategoriesPercentage);
+vars.put(&quot;fileId1&quot;, uuid1);
+vars.put(&quot;fileId2&quot;, uuid2);
+</stringProp>
+        </BeanShellSampler>
+        <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Healthcheck HTTP Request" enabled="false">
           <stringProp name="HTTPSampler.domain">epr-backend.${__P(env)}.cdp-int.defra.cloud</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
@@ -44,7 +193,7 @@
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Organisation Details HTTP Request" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Organisation Details HTTP Request">
           <stringProp name="HTTPSampler.domain">epr-backend.${__P(env)}.cdp-int.defra.cloud</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.path">/v1/apply/organisation</stringProp>
@@ -995,17 +1144,17 @@
   &quot;data&quot;: {&#xd;
     &quot;main&quot;: {&#xd;
       &quot;FAxvwq&quot;: &quot;false&quot;,&#xd;
-      &quot;WVADkQ&quot;: &quot;Reprocessor&quot;,&#xd;
-      &quot;BYtjnh&quot;: &quot;Alice&quot;,&#xd;
-      &quot;aSoxDO&quot;: &quot;REEXServiceTeam@defra.gov.uk&quot;,&#xd;
-      &quot;aIFHXo&quot;: &quot;0123456789&quot;,&#xd;
-      &quot;LyeSzH&quot;: &quot;Manager&quot;,&#xd;
-      &quot;VcdRNr&quot;: &quot;England, Northern Ireland, Scotland, Wales&quot;,&#xd;
+      &quot;WVADkQ&quot;: &quot;${role}&quot;,&#xd;
+      &quot;BYtjnh&quot;: &quot;${fullName}&quot;,&#xd;
+      &quot;aSoxDO&quot;: &quot;${email}&quot;,&#xd;
+      &quot;aIFHXo&quot;: &quot;${telephone}&quot;,&#xd;
+      &quot;LyeSzH&quot;: &quot;${jobTitle}&quot;,&#xd;
+      &quot;VcdRNr&quot;: &quot;${nations}&quot;,&#xd;
       &quot;hNTczg&quot;: &quot;false&quot;,&#xd;
       &quot;lEnwLd&quot;: &quot;true&quot;,&#xd;
-      &quot;JbEBvr&quot;: &quot;ACME ltd&quot;,&#xd;
-      &quot;QdhMJS&quot;: &quot;ACME ltd&quot;,&#xd;
-      &quot;VATjEi&quot;: &quot;Palace of Westminster,London,SW1A 0AA&quot;,&#xd;
+      &quot;JbEBvr&quot;: &quot;${company}&quot;,&#xd;
+      &quot;QdhMJS&quot;: &quot;${company}&quot;,&#xd;
+      &quot;VATjEi&quot;: &quot;${address}&quot;,&#xd;
       &quot;uNBiGz&quot;: &quot;An individual&quot;&#xd;
     },&#xd;
     &quot;repeaters&quot;: {},&#xd;
@@ -1019,7 +1168,7 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">content-type</stringProp>
@@ -1052,7 +1201,7 @@
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Registration Details HTTP Request" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Registration Details HTTP Request">
           <stringProp name="HTTPSampler.domain">epr-backend.${__P(env)}.cdp-int.defra.cloud</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.path">/v1/apply/registration</stringProp>
@@ -1920,43 +2069,43 @@
       &quot;LoZFoG&quot;: &quot;true&quot;,&#xd;
       &quot;QnSRcX&quot;: &quot;${orgId}&quot;,&#xd;
       &quot;RIXIzA&quot;: &quot;${refNo}&quot;,&#xd;
-      &quot;CzNRVZ&quot;: &quot;Alice&quot;,&#xd;
-      &quot;xpDUqn&quot;: &quot;alice@foo.com&quot;,&#xd;
-      &quot;ZgTfLO&quot;: &quot;+44987654321&quot;,&#xd;
-      &quot;aSKIDS&quot;: &quot;Manager&quot;,&#xd;
-      &quot;pGYoub&quot;: &quot;Downing Street,London,SW1A 2AA&quot;,&#xd;
-      &quot;fubWwR&quot;: &quot;CBDU123456&quot;,&#xd;
-      &quot;QHJFhL&quot;: &quot;Waste management licence or environmental permit&quot;,&#xd;
-      &quot;CACJrG&quot;: &quot;1234567890&quot;,&#xd;
-      &quot;BeHQjA&quot;: &quot;Aluminium (R4)&quot;,&#xd;
-      &quot;vsaLhJ&quot;: &quot;council&quot;,&#xd;
-      &quot;NOwTKr&quot;: &quot;Alice&quot;,&#xd;
-      &quot;rYgNmR&quot;: &quot;alice@foo.com&quot;,&#xd;
-      &quot;inueIm&quot;: &quot;+44987654321&quot;,&#xd;
-      &quot;MdZwoU&quot;: &quot;Director&quot;,&#xd;
-      &quot;RPiGkV&quot;: &quot;Alice&quot;,&#xd;
-      &quot;eSxaKY&quot;: &quot;alice@foo.com&quot;,&#xd;
-      &quot;AkoyKd&quot;: &quot;+44987654321&quot;,&#xd;
-      &quot;mGpVDA&quot;: &quot;Manager&quot;&#xd;
+      &quot;CzNRVZ&quot;: &quot;${fullName}&quot;,&#xd;
+      &quot;xpDUqn&quot;: &quot;${email}&quot;,&#xd;
+      &quot;ZgTfLO&quot;: &quot;${telephone}&quot;,&#xd;
+      &quot;aSKIDS&quot;: &quot;${jobTitle}&quot;,&#xd;
+      &quot;pGYoub&quot;: &quot;${address}&quot;,&#xd;
+      &quot;fubWwR&quot;: &quot;${wasteRegNumber}&quot;,&#xd;
+      &quot;QHJFhL&quot;: &quot;${permitType}&quot;,&#xd;
+      &quot;CACJrG&quot;: &quot;${permitNumber}&quot;,&#xd;
+      &quot;BeHQjA&quot;: &quot;${material}&quot;,&#xd;
+      &quot;vsaLhJ&quot;: &quot;${supplier}&quot;,&#xd;
+      &quot;NOwTKr&quot;: &quot;${fullName}&quot;,&#xd;
+      &quot;rYgNmR&quot;: &quot;${email}&quot;,&#xd;
+      &quot;inueIm&quot;: &quot;${telephone}&quot;,&#xd;
+      &quot;MdZwoU&quot;: &quot;${jobTitle}&quot;,&#xd;
+      &quot;RPiGkV&quot;: &quot;${fullName}&quot;,&#xd;
+      &quot;eSxaKY&quot;: &quot;${email}&quot;,&#xd;
+      &quot;AkoyKd&quot;: &quot;${telephone}&quot;,&#xd;
+      &quot;mGpVDA&quot;: &quot;${jobTitle}&quot;&#xd;
     },&#xd;
     &quot;repeaters&quot;: {&#xd;
       &quot;GzScMv&quot;: [&#xd;
         {&#xd;
-          &quot;ZcjmuP&quot;: &quot;southampton&quot;&#xd;
+          &quot;ZcjmuP&quot;: &quot;${city}&quot;&#xd;
         }&#xd;
       ]&#xd;
     },&#xd;
     &quot;files&quot;: {&#xd;
       &quot;qEZeYC&quot;: [&#xd;
         {&#xd;
-          &quot;fileId&quot;: &quot;d5e8e077-f2fc-46ed-b235-b1e67386046b&quot;,&#xd;
-          &quot;userDownloadLink&quot;: &quot;https://forms-designer.test.cdp-int.defra.cloud/file-download/d5e8e077-f2fc-46ed-b235-b1e67386046b&quot;&#xd;
+          &quot;fileId&quot;: &quot;${fileId1}&quot;,&#xd;
+          &quot;userDownloadLink&quot;: &quot;https://forms-designer.test.cdp-int.defra.cloud/file-download/${fileId1}&quot;&#xd;
         }&#xd;
       ],&#xd;
       &quot;uUWjUW&quot;: [&#xd;
         {&#xd;
-          &quot;fileId&quot;: &quot;c4d1e05d-e79c-4a81-9d96-2ac38ce2cb7b&quot;,&#xd;
-          &quot;userDownloadLink&quot;: &quot;https://forms-designer.test.cdp-int.defra.cloud/file-download/c4d1e05d-e79c-4a81-9d96-2ac38ce2cb7b&quot;&#xd;
+          &quot;fileId&quot;: &quot;${fileId2}&quot;,&#xd;
+          &quot;userDownloadLink&quot;: &quot;https://forms-designer.test.cdp-int.defra.cloud/file-download/${fileId2}&quot;&#xd;
         }&#xd;
       ]&#xd;
     }&#xd;
@@ -1969,7 +2118,7 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">content-type</stringProp>
@@ -1989,7 +2138,7 @@
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Accreditation Details HTTP Request" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Accreditation Details HTTP Request">
           <stringProp name="HTTPSampler.domain">epr-backend.${__P(env)}.cdp-int.defra.cloud</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.path">/v1/apply/registration</stringProp>
@@ -2802,48 +2951,48 @@
       &quot;NPFtSF&quot;: &quot;true&quot;,&#xd;
       &quot;Ooierc&quot;: &quot;${orgId}&quot;,&#xd;
       &quot;MyWHms&quot;: &quot;${refNo}&quot;,&#xd;
-      &quot;qkCaCh&quot;: &quot;Aluminium (R4)&quot;,&#xd;
-      &quot;XKWebf&quot;: &quot;Over 10,000 tonnes&quot;,&#xd;
-      &quot;yzvIcu&quot;: &quot;60&quot;,&#xd;
+      &quot;qkCaCh&quot;: &quot;${material}&quot;,&#xd;
+      &quot;XKWebf&quot;: &quot;${tonnageBand}&quot;,&#xd;
+      &quot;yzvIcu&quot;: &quot;${reproPercentage}&quot;,&#xd;
       &quot;EJZCFh&quot;: &quot;&quot;,&#xd;
-      &quot;vjegvC&quot;: &quot;30&quot;,&#xd;
+      &quot;vjegvC&quot;: &quot;${priceSupportPercentage}&quot;,&#xd;
       &quot;kFuujS&quot;: &quot;&quot;,&#xd;
-      &quot;gGuncQ&quot;: &quot;15&quot;,&#xd;
+      &quot;gGuncQ&quot;: &quot;${businessSupportPercentage}&quot;,&#xd;
       &quot;FLctZj&quot;: &quot;&quot;,&#xd;
-      &quot;jqvpTT&quot;: &quot;8&quot;,&#xd;
+      &quot;jqvpTT&quot;: &quot;${commsPercentage}&quot;,&#xd;
       &quot;rLHNGq&quot;: &quot;&quot;,&#xd;
-      &quot;lACgrU&quot;: &quot;4&quot;,&#xd;
+      &quot;lACgrU&quot;: &quot;${developingNewMarketsPercentage}&quot;,&#xd;
       &quot;xoLHwv&quot;: &quot;&quot;,&#xd;
-      &quot;gBpCMU&quot;: &quot;2&quot;,&#xd;
+      &quot;gBpCMU&quot;: &quot;${developingNewUsesPercentage}&quot;,&#xd;
       &quot;BuSamv&quot;: &quot;&quot;,&#xd;
-      &quot;czCOzR&quot;: &quot;1&quot;,&#xd;
+      &quot;czCOzR&quot;: &quot;${otherCategoriesPercentage}&quot;,&#xd;
       &quot;bxGgkj&quot;: &quot;&quot;,&#xd;
-      &quot;WGGxRc&quot;: &quot;Alice&quot;,&#xd;
-      &quot;qeJOQY&quot;: &quot;alice@foo.com&quot;,&#xd;
-      &quot;xyQDVo&quot;: &quot;+44987654321&quot;,&#xd;
-      &quot;NQtVfy&quot;: &quot;Manager&quot;&#xd;
+      &quot;WGGxRc&quot;: &quot;${fullName}&quot;,&#xd;
+      &quot;qeJOQY&quot;: &quot;${email}&quot;,&#xd;
+      &quot;xyQDVo&quot;: &quot;${telephone}&quot;,&#xd;
+      &quot;NQtVfy&quot;: &quot;${jobTitle}&quot;&#xd;
     },&#xd;
     &quot;repeaters&quot;: {&#xd;
       &quot;QkZUNV&quot;: [&#xd;
         {&#xd;
-          &quot;jiMeVj&quot;: &quot;Alice&quot;,&#xd;
-          &quot;eWxRYL&quot;: &quot;alice@foo.com&quot;,&#xd;
-          &quot;NRkpFI&quot;: &quot;+44987654321&quot;,&#xd;
-          &quot;LUGryB&quot;: &quot;Manager&quot;&#xd;
+          &quot;jiMeVj&quot;: &quot;${fullName}&quot;,&#xd;
+          &quot;eWxRYL&quot;: &quot;${email}&quot;,&#xd;
+          &quot;NRkpFI&quot;: &quot;${telephone}&quot;,&#xd;
+          &quot;LUGryB&quot;: &quot;${jobTitle}&quot;&#xd;
         }&#xd;
       ]&#xd;
     },&#xd;
     &quot;files&quot;: {&#xd;
       &quot;TJTMtQ&quot;: [&#xd;
         {&#xd;
-          &quot;fileId&quot;: &quot;cd6cb129-e34b-4c8f-82b3-6d4c730b7484&quot;,&#xd;
-          &quot;userDownloadLink&quot;: &quot;https://forms-designer.test.cdp-int.defra.cloud/file-download/cd6cb129-e34b-4c8f-82b3-6d4c730b7484&quot;&#xd;
+          &quot;fileId&quot;: &quot;${fileId1}&quot;,&#xd;
+          &quot;userDownloadLink&quot;: &quot;https://forms-designer.test.cdp-int.defra.cloud/file-download/${fileId1}&quot;&#xd;
         }&#xd;
       ],&#xd;
       &quot;zYxOlv&quot;: [&#xd;
         {&#xd;
-          &quot;fileId&quot;: &quot;b9b8aca1-71bc-4817-8e7a-744357cde953&quot;,&#xd;
-          &quot;userDownloadLink&quot;: &quot;https://forms-designer.test.cdp-int.defra.cloud/file-download/b9b8aca1-71bc-4817-8e7a-744357cde953&quot;&#xd;
+          &quot;fileId&quot;: &quot;${fileId2}&quot;,&#xd;
+          &quot;userDownloadLink&quot;: &quot;https://forms-designer.test.cdp-int.defra.cloud/file-download/${fileId2}&quot;&#xd;
         }&#xd;
       ]&#xd;
     }&#xd;
@@ -2856,7 +3005,7 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">content-type</stringProp>
@@ -2865,7 +3014,7 @@
             </collectionProp>
           </HeaderManager>
           <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="49587">201</stringProp>
             </collectionProp>
@@ -2877,7 +3026,7 @@
           <hashTree/>
         </hashTree>
       </hashTree>
-      <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
+      <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
           <name>saveConfig</name>
@@ -2914,7 +3063,7 @@
         <stringProp name="filename">report.csv</stringProp>
       </ResultCollector>
       <hashTree/>
-      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
           <name>saveConfig</name>
