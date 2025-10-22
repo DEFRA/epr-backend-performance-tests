@@ -5,6 +5,8 @@
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
         <collectionProp name="Arguments.arguments"/>
       </elementProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
     </TestPlan>
     <hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group">
@@ -141,6 +143,17 @@ String otherCategoriesPercentage = &quot;&quot; + rand.nextInt(100);
 String uuid1 = UUID.randomUUID().toString();
 String uuid2 = UUID.randomUUID().toString();
 
+String s3Key = UUID.randomUUID().toString();
+String summaryLogId = UUID.randomUUID().toString();
+
+String[] fileStatuses = {
+  &quot;complete&quot;,
+  &quot;pending&quot;,
+  &quot;rejected&quot;
+}
+
+String fileStatus = fileStatuses[rand.nextInt(fileStatuses.length)];
+
 vars.put(&quot;firstName&quot;, firstName);
 vars.put(&quot;lastName&quot;, lastName);
 vars.put(&quot;fullName&quot;, firstName + &quot; &quot; + lastName);
@@ -167,6 +180,9 @@ vars.put(&quot;developingNewUsesPercentage&quot;, developingNewUsesPercentage);
 vars.put(&quot;otherCategoriesPercentage&quot;, otherCategoriesPercentage);
 vars.put(&quot;fileId1&quot;, uuid1);
 vars.put(&quot;fileId2&quot;, uuid2);
+vars.put(&quot;s3Key&quot;, s3Key);
+vars.put(&quot;summaryLogId&quot;, summaryLogId);
+vars.put(&quot;fileStatus&quot;, fileStatus);
 </stringProp>
         </BeanShellSampler>
         <hashTree/>
@@ -194,7 +210,7 @@ vars.put(&quot;fileId2&quot;, uuid2);
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Organisation Details HTTP Request" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Organisation Details HTTP Request">
           <stringProp name="HTTPSampler.domain">epr-backend.${__P(env)}.cdp-int.defra.cloud</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.path">/v1/apply/organisation</stringProp>
@@ -1202,7 +1218,7 @@ vars.put(&quot;fileId2&quot;, uuid2);
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Registration Details HTTP Request" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Registration Details HTTP Request">
           <stringProp name="HTTPSampler.domain">epr-backend.${__P(env)}.cdp-int.defra.cloud</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.path">/v1/apply/registration</stringProp>
@@ -2139,7 +2155,7 @@ vars.put(&quot;fileId2&quot;, uuid2);
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Accreditation Details HTTP Request" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Accreditation Details HTTP Request">
           <stringProp name="HTTPSampler.domain">epr-backend.${__P(env)}.cdp-int.defra.cloud</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.path">/v1/apply/registration</stringProp>
@@ -3018,6 +3034,99 @@ vars.put(&quot;fileId2&quot;, uuid2);
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="49587">201</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Summary Logs Validate HTTP Request">
+          <stringProp name="HTTPSampler.domain">epr-backend.${__P(env)}.cdp-int.defra.cloud</stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.path">/v1/organisation/${orgId}/registration/${refNo}/summary-logs/validate</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;s3Bucket&quot;: &quot;perf-test-re-ex-summary-logs-05244&quot;,&#xd;
+    &quot;s3Key&quot;: &quot;${s3Key}&quot;,&#xd;
+    &quot;fileId&quot;: &quot;test-file-id-${summaryLogId}&quot;,&#xd;
+    &quot;filename&quot;: &quot;test-filename-${summaryLogId}.xlsx&quot;&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">content-type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49588">202</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Summary Logs Upload Completed HTTP Request">
+          <stringProp name="HTTPSampler.domain">epr-backend.${__P(env)}.cdp-int.defra.cloud</stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.path">/v1/organisation/${orgId}/registration/${refNo}/summary-logs/${summaryLogId}/upload-completed</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;form&quot;: {&#xd;
+        &quot;summaryLogUpload&quot;: {&#xd;
+            &quot;fileId&quot;: &quot;test-upload-file-id-${summaryLogId}&quot;,&#xd;
+            &quot;filename&quot;: &quot;test-upload-${summaryLogId}.xlsx&quot;,&#xd;
+            &quot;fileStatus&quot;: &quot;${fileStatus}&quot;,&#xd;
+            &quot;s3Bucket&quot;: &quot;perf-test-re-ex-summary-logs-05244&quot;,&#xd;
+            &quot;s3Key&quot;: &quot;${s3Key}&quot;&#xd;
+        }&#xd;
+    }&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">content-type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49588">202</stringProp>
             </collectionProp>
             <stringProp name="Assertion.custom_message"></stringProp>
             <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
