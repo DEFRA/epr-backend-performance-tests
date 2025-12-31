@@ -5,8 +5,6 @@
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
         <collectionProp name="Arguments.arguments"/>
       </elementProp>
-      <boolProp name="TestPlan.functional_mode">false</boolProp>
-      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
     </TestPlan>
     <hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group">
@@ -99,6 +97,8 @@ String lastName = lastNames[rand.nextInt(lastNames.length)];
 String fullAddress = addresses[rand.nextInt(addresses.length)];
 String jobTitle = jobTitles[rand.nextInt(jobTitles.length)];
 
+String postcode = fullAddress.split(&quot;,&quot;)[2].trim();
+
 String company = companies[rand.nextInt(companies.length)];
 
 String role = roles[rand.nextInt(roles.length)];
@@ -160,6 +160,7 @@ vars.put(&quot;fullName&quot;, firstName + &quot; &quot; + lastName);
 vars.put(&quot;email&quot;, email);
 vars.put(&quot;telephone&quot;, mobileNumber);
 vars.put(&quot;address&quot;, fullAddress);
+vars.put(&quot;postcode&quot;, postcode);
 vars.put(&quot;jobTitle&quot;, jobTitle);
 vars.put(&quot;city&quot;, fullAddress.split(&quot;, &quot;)[1]);
 vars.put(&quot;role&quot;, role);
@@ -1650,7 +1651,7 @@ vars.put(&quot;fileStatus&quot;, fileStatus);
               &quot;schema&quot;: {&#xd;
                 &quot;min&quot;: 6,&#xd;
                 &quot;max&quot;: 6,&#xd;
-                &quot;regex&quot;: &quot;\\d{6}&quot;&#xd;
+                &quot;regex&quot;: &quot;\\\\d{6}&quot;&#xd;
               },&#xd;
               &quot;id&quot;: &quot;969a7edc-adf8-4eca-b220-e9c8ea7821ca&quot;&#xd;
             },&#xd;
@@ -4772,7 +4773,7 @@ vars.put(&quot;fileStatus&quot;, fileStatus);
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Accreditation Details HTTP Request">
           <stringProp name="HTTPSampler.domain">epr-backend.${__P(env)}.cdp-int.defra.cloud</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
-          <stringProp name="HTTPSampler.path">/v1/apply/registration</stringProp>
+          <stringProp name="HTTPSampler.path">/v1/apply/accreditation</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -4874,7 +4875,7 @@ vars.put(&quot;fileStatus&quot;, fileStatus);
               &quot;schema&quot;: {&#xd;
                 &quot;min&quot;: 6,&#xd;
                 &quot;max&quot;: 6,&#xd;
-                &quot;regex&quot;: &quot;\\d{6}&quot;&#xd;
+                &quot;regex&quot;: &quot;\\\\d{6}&quot;&#xd;
               },&#xd;
               &quot;id&quot;: &quot;9b9cc9a9-c00c-455e-803d-90fd78c8ae2d&quot;&#xd;
             },&#xd;
@@ -5599,8 +5600,9 @@ vars.put(&quot;fileStatus&quot;, fileStatus);
       &quot;BQWXPN&quot;: &quot;${orgId}&quot;,&#xd;
       &quot;kiwNtq&quot;: &quot;${refNo}&quot;,&#xd;
       &quot;kntTWV&quot;: &quot;${address}&quot;,&#xd;
-      &quot;gWdCTX&quot;: &quot;W1B 1NT&quot;,&#xd;
-      &quot;IaTELm&quot;: &quot;Paper or board (R3)&quot;,&#xd;
+      &quot;gWdCTX&quot;: &quot;${postcode}&quot;,&#xd;
+      &quot;IaTELm&quot;: &quot;Glass (R5)&quot;,&#xd;
+      &quot;gQZpRd&quot;: &quot;Both&quot;,&#xd;
       &quot;xBWNGE&quot;: &quot;Up to 10000 tonnes&quot;,&#xd;
       &quot;LuybKn&quot;: &quot;1&quot;,&#xd;
       &quot;MckvxX&quot;: &quot;More detail for spend on new reprocessing infrastructure&quot;,&#xd;
@@ -5654,7 +5656,7 @@ vars.put(&quot;fileStatus&quot;, fileStatus);
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">content-type</stringProp>
@@ -5663,7 +5665,7 @@ vars.put(&quot;fileStatus&quot;, fileStatus);
             </collectionProp>
           </HeaderManager>
           <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="49587">201</stringProp>
             </collectionProp>
@@ -5674,7 +5676,7 @@ vars.put(&quot;fileStatus&quot;, fileStatus);
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Summary Logs Upload Completed HTTP Request" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Summary Logs Upload Completed HTTP Request">
           <stringProp name="HTTPSampler.domain">epr-backend.${__P(env)}.cdp-int.defra.cloud</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.path">/v1/organisations/${orgId}/registrations/${refNo}/summary-logs/${summaryLogId}/upload-completed</stringProp>
@@ -5724,7 +5726,7 @@ vars.put(&quot;fileStatus&quot;, fileStatus);
           <hashTree/>
         </hashTree>
       </hashTree>
-      <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
+      <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
           <name>saveConfig</name>
@@ -5761,7 +5763,7 @@ vars.put(&quot;fileStatus&quot;, fileStatus);
         <stringProp name="filename">report.csv</stringProp>
       </ResultCollector>
       <hashTree/>
-      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
           <name>saveConfig</name>
