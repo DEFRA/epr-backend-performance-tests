@@ -18,7 +18,7 @@
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="DataGenerator">
+        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="DataGenerator" enabled="true">
           <stringProp name="BeanShellSampler.query">import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.UUID;
@@ -1520,7 +1520,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
             </collectionProp>
           </HeaderManager>
           <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion">
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="49586">200</stringProp>
             </collectionProp>
@@ -1530,13 +1530,13 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
             <intProp name="Assertion.test_type">2</intProp>
           </ResponseAssertion>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="orgId JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="orgId JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">orgId</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.orgId</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="refNo JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="refNo JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">refNo</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.referenceNumber</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
@@ -1544,7 +1544,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Registration Details HTTP Request">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Registration Details HTTP Request" enabled="true">
           <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
           <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
           <stringProp name="HTTPSampler.path">/v1/apply/registration</stringProp>
@@ -4757,7 +4757,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
             </collectionProp>
           </HeaderManager>
           <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion">
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="49587">201</stringProp>
             </collectionProp>
@@ -4768,7 +4768,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Accreditation Details HTTP Request">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Accreditation Details HTTP Request" enabled="true">
           <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
           <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
           <stringProp name="HTTPSampler.path">/v1/apply/accreditation</stringProp>
@@ -5687,14 +5687,14 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">{&#xd;
-    userId: ${userId},&#xd;
-    email: &quot;alice.smith@ecorecycle.com&quot;,&#xd;
-    firstName: &quot;Alice&quot;,&#xd;
-    lastName: &quot;Smith&quot;,&#xd;
-    loa: &apos;1&apos;,&#xd;
-    aal: &apos;1&apos;,&#xd;
-    enrolmentCount: 1,&#xd;
-    enrolmentRequestCount: 1&#xd;
+    &quot;userId&quot;: &quot;${userId}&quot;,&#xd;
+    &quot;email&quot;: &quot;alice.smith@ecorecycle.com&quot;,&#xd;
+    &quot;firstName&quot;: &quot;Alice&quot;,&#xd;
+    &quot;lastName&quot;: &quot;Smith&quot;,&#xd;
+    &quot;loa&quot;: &quot;1&quot;,&#xd;
+    &quot;aal&quot;: &quot;1&quot;,&#xd;
+    &quot;enrolmentCount&quot;: 1,&#xd;
+    &quot;enrolmentRequestCount&quot;: 1&#xd;
   }</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
@@ -5719,7 +5719,6 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">true</boolProp>
           <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
             <collectionProp name="Arguments.arguments">
@@ -5804,7 +5803,6 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           <stringProp name="HTTPSampler.domain">${DEFRA_ID_STUB_HOST}</stringProp>
           <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
           <stringProp name="HTTPSampler.path">/cdp-defra-id-stub/authorize</stringProp>
-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
           <boolProp name="HTTPSampler.DO_MULTIPART_POST">true</boolProp>
@@ -5848,7 +5846,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
               </elementProp>
               <elementProp name="scope" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                <stringProp name="Argument.value">role</stringProp>
+                <stringProp name="Argument.value">email</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
                 <stringProp name="Argument.name">scope</stringProp>
@@ -5890,10 +5888,10 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">{&#xd;
-      client_id: &quot;63983fc2-cfff-45bb-8ec2-959e21062b9a&quot;,&#xd;
-      client_secret: &quot;test_value&quot;,&#xd;
-      grant_type: &quot;authorization_code&quot;,&#xd;
-      code: &quot;${defraIdSessionId}&quot;&#xd;
+      &quot;client_id&quot;: &quot;63983fc2-cfff-45bb-8ec2-959e21062b9a&quot;,&#xd;
+      &quot;client_secret&quot;: &quot;test_value&quot;,&#xd;
+      &quot;grant_type&quot;: &quot;authorization_code&quot;,&#xd;
+      &quot;code&quot;: &quot;${defraIdSessionId}&quot;&#xd;
     }</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
@@ -5966,7 +5964,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">content-type</stringProp>
@@ -5979,7 +5977,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
             </collectionProp>
           </HeaderManager>
           <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion">
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="49587">201</stringProp>
             </collectionProp>
@@ -5989,7 +5987,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
             <intProp name="Assertion.test_type">2</intProp>
           </ResponseAssertion>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="uploadId JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="uploadId JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">uploadId</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.uploadId</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
@@ -6018,7 +6016,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">content-type</stringProp>
@@ -6031,7 +6029,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
             </collectionProp>
           </HeaderManager>
           <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion">
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="1567029">302
 </stringProp>
@@ -6066,42 +6064,42 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="s3Bucket  JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="s3Bucket  JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">s3Bucket</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.form.file.s3Bucket</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="s3Key JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="s3Key JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">s3Key</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.form.file.s3Key</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="fileId JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="fileId JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">fileId</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.form.file.fileId</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="filename JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="filename JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">filename</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.form.file.filename</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="fileStatus JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="fileStatus JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">fileStatus</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.form.file.fileStatus</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer">
+          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
             <stringProp name="ConstantTimer.delay">500</stringProp>
             <stringProp name="TestPlan.comments">Delay between CDP Uploader status polling</stringProp>
           </ConstantTimer>
           <hashTree/>
-          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Loop counter PostProcessor">
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Loop counter PostProcessor" enabled="true">
             <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
@@ -6140,7 +6138,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">content-type</stringProp>
@@ -6149,7 +6147,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
             </collectionProp>
           </HeaderManager>
           <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion">
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="49588">202</stringProp>
             </collectionProp>
@@ -6160,7 +6158,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
-        <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="Check Summary Log Status">
+        <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="Check Summary Log Status" enabled="true">
           <stringProp name="WhileController.condition">${__groovy(vars.get(&quot;summaryLogStatus&quot;) != &quot;validated&quot; &amp;&amp; ${slCounter} &lt; ${maxAttempts})}</stringProp>
         </WhileController>
         <hashTree>
@@ -6183,12 +6181,12 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer">
+          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
             <stringProp name="ConstantTimer.delay">500</stringProp>
             <stringProp name="TestPlan.comments">Delay between Summary Log status polling</stringProp>
           </ConstantTimer>
           <hashTree/>
-          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Loop counter PostProcessor">
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Loop counter PostProcessor" enabled="true">
             <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
@@ -6211,7 +6209,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">content-type</stringProp>
@@ -6224,7 +6222,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
             </collectionProp>
           </HeaderManager>
           <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion">
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="49586">200</stringProp>
             </collectionProp>
