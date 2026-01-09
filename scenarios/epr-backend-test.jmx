@@ -1536,7 +1536,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="refNo JSON Extractor" enabled="true">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="refNo JSON Extractor">
             <stringProp name="JSONPostProcessor.referenceNames">refNo</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.referenceNumber</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
@@ -4757,7 +4757,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
             </collectionProp>
           </HeaderManager>
           <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="49587">201</stringProp>
             </collectionProp>
@@ -5866,6 +5866,84 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
             </collectionProp>
           </HeaderManager>
           <hashTree/>
+          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Defra ID Session Id Regular Expression Extractor">
+            <stringProp name="RegexExtractor.useHeaders">true</stringProp>
+            <stringProp name="RegexExtractor.refname">defraIdSessionId</stringProp>
+            <stringProp name="RegexExtractor.regex">sessionId=([^&amp;\s]+)</stringProp>
+            <stringProp name="RegexExtractor.template">$1$</stringProp>
+            <stringProp name="RegexExtractor.default"></stringProp>
+            <boolProp name="RegexExtractor.default_empty_value">false</boolProp>
+            <stringProp name="RegexExtractor.match_number">1</stringProp>
+          </RegexExtractor>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Defra ID Stub Generate Token">
+          <stringProp name="HTTPSampler.domain">${DEFRA_ID_STUB_HOST}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
+          <stringProp name="HTTPSampler.path">/cdp-defra-id-stub/token</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+      client_id: &quot;63983fc2-cfff-45bb-8ec2-959e21062b9a&quot;,&#xd;
+      client_secret: &quot;test_value&quot;,&#xd;
+      grant_type: &quot;authorization_code&quot;,&#xd;
+      code: &quot;${defraIdSessionId}&quot;&#xd;
+    }</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">content-type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="Access Token JSON Extractor">
+            <stringProp name="JSONPostProcessor.referenceNames">accessToken</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.access_token</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+            <stringProp name="Scope.variable"></stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Link User to Organisation ">
+          <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
+          <stringProp name="HTTPSampler.path">/v1/organisations/${orgId}/link</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">content-type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Authorization</stringProp>
+                <stringProp name="Header.value">Bearer: ${accessToken}</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
         </hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Summary Logs Initiate HTTP Request">
           <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
@@ -5893,6 +5971,10 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">content-type</stringProp>
                 <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Authorization</stringProp>
+                <stringProp name="Header.value">Bearer: ${accessToken}</stringProp>
               </elementProp>
             </collectionProp>
           </HeaderManager>
@@ -6134,6 +6216,10 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">content-type</stringProp>
                 <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Authorization</stringProp>
+                <stringProp name="Header.value">Bearer: ${accessToken}</stringProp>
               </elementProp>
             </collectionProp>
           </HeaderManager>
