@@ -5,6 +5,8 @@
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
         <collectionProp name="Arguments.arguments"/>
       </elementProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
     </TestPlan>
     <hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group">
@@ -13,12 +15,12 @@
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
-          <stringProp name="LoopController.loops">1</stringProp>
+          <stringProp name="LoopController.loops">20</stringProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="DataGenerator" enabled="true">
+        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="DataGenerator">
           <stringProp name="BeanShellSampler.query">import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.UUID;
@@ -182,7 +184,7 @@ vars.put(&quot;csrfToken&quot;, csrfToken);
 vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
         </BeanShellSampler>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Organisation Details HTTP Request" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Organisation Details HTTP Request">
           <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
           <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -1542,7 +1544,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Registration Details HTTP Request" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Registration Details HTTP Request">
           <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
           <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -4767,7 +4769,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Accreditation Details HTTP Request" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Accreditation Details HTTP Request">
           <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
           <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -5674,7 +5676,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Defra ID Stub Register User" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Defra ID Stub Register User">
           <stringProp name="HTTPSampler.domain">${DEFRA_ID_STUB_HOST}</stringProp>
           <stringProp name="HTTPSampler.port">${DEFRA_ID_STUB_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -5920,7 +5922,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Link User to Organisation " enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Link User to Organisation " enabled="false">
           <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
           <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -5948,7 +5950,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           </HeaderManager>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Summary Logs Initiate HTTP Request" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Summary Logs Initiate HTTP Request">
           <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
           <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -6006,7 +6008,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="CDP Uploader HTTP Request" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="CDP Uploader HTTP Request">
           <stringProp name="HTTPSampler.domain">${CDP_UPLOADER_HOST}</stringProp>
           <stringProp name="HTTPSampler.port">${CDP_UPLOADER_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -6056,7 +6058,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           <stringProp name="WhileController.condition">${__groovy(!vars.get(&quot;uploadStatus&quot;).equals(&quot;ready&quot;) &amp;&amp; vars.get(&quot;counter&quot;).toInteger() &lt; vars.get(&quot;maxAttempts&quot;).toInteger())}</stringProp>
         </WhileController>
         <hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="CDP Uploader Status HTTP Request">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="CDP Uploader Status HTTP Request" enabled="true">
             <stringProp name="HTTPSampler.domain">${CDP_UPLOADER_HOST}</stringProp>
             <stringProp name="HTTPSampler.port">${CDP_UPLOADER_PORT}</stringProp>
             <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -6070,7 +6072,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
             </elementProp>
           </HTTPSamplerProxy>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="uploadStatus JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="uploadStatus JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">uploadStatus</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.uploadStatus</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
@@ -6082,7 +6084,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="s3Key JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="s3Key JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">s3Key</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.form.file.s3Key</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
@@ -6106,12 +6108,12 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer">
+          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
             <stringProp name="ConstantTimer.delay">1000</stringProp>
             <stringProp name="TestPlan.comments">Delay between CDP Uploader status polling</stringProp>
           </ConstantTimer>
           <hashTree/>
-          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Loop counter PostProcessor">
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Loop counter PostProcessor" enabled="true">
             <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
@@ -6175,7 +6177,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           <stringProp name="WhileController.condition">${__groovy(!vars.get(&quot;summaryLogStatus&quot;).equals(&quot;validated&quot;) &amp;&amp; vars.get(&quot;slCounter&quot;).toInteger() &lt; vars.get(&quot;maxAttempts&quot;).toInteger())}</stringProp>
         </WhileController>
         <hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Summary Log Status HTTP Request">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Summary Log Status HTTP Request" enabled="true">
             <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
             <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
             <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -6189,7 +6191,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
             </elementProp>
           </HTTPSamplerProxy>
           <hashTree/>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">content-type</stringProp>
@@ -6202,18 +6204,18 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
             </collectionProp>
           </HeaderManager>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="summaryLogStatus JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="summaryLogStatus JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">summaryLogStatus</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.status</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer">
+          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
             <stringProp name="ConstantTimer.delay">1000</stringProp>
             <stringProp name="TestPlan.comments">Delay between Summary Log status polling</stringProp>
           </ConstantTimer>
           <hashTree/>
-          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Loop counter PostProcessor">
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Loop counter PostProcessor" enabled="true">
             <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
@@ -6251,7 +6253,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           </HeaderManager>
           <hashTree/>
         </hashTree>
-        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config">
+        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
           <stringProp name="delimiter">,</stringProp>
           <stringProp name="fileEncoding"></stringProp>
           <stringProp name="filename">testinput.csv</stringProp>
@@ -6264,7 +6266,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
         </CSVDataSet>
         <hashTree/>
       </hashTree>
-      <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report">
+      <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
           <name>saveConfig</name>
@@ -6301,7 +6303,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
         <stringProp name="filename">report.csv</stringProp>
       </ResultCollector>
       <hashTree/>
-      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
           <name>saveConfig</name>
@@ -6338,7 +6340,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
         <stringProp name="filename"></stringProp>
       </ResultCollector>
       <hashTree/>
-      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="Environment User Defined Variables">
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="Environment User Defined Variables" enabled="true">
         <collectionProp name="Arguments.arguments">
           <elementProp name="EPR_BACKEND_HOST" elementType="Argument">
             <stringProp name="Argument.name">EPR_BACKEND_HOST</stringProp>
