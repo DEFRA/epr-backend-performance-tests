@@ -5,22 +5,20 @@
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
         <collectionProp name="Arguments.arguments"/>
       </elementProp>
-      <boolProp name="TestPlan.functional_mode">false</boolProp>
-      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
     </TestPlan>
     <hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Form Submission Only Thread Group">
-        <intProp name="ThreadGroup.num_threads">15</intProp>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Summary Logs Thread Group">
+        <intProp name="ThreadGroup.num_threads">50</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
-          <stringProp name="LoopController.loops">20</stringProp>
+          <stringProp name="LoopController.loops">1</stringProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="DataGenerator" enabled="true">
+        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="DataGenerator">
           <stringProp name="BeanShellSampler.query">import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.UUID;
@@ -152,6 +150,9 @@ String csrfToken = UUID.randomUUID().toString();
 String relationshipId = UUID.randomUUID().toString();
 
 
+String userOrgId = UUID.randomUUID().toString();
+
+
 vars.put(&quot;firstName&quot;, firstName);
 vars.put(&quot;lastName&quot;, lastName);
 vars.put(&quot;fullName&quot;, firstName + &quot; &quot; + lastName);
@@ -181,14 +182,16 @@ vars.put(&quot;fileId1&quot;, uuid1);
 vars.put(&quot;fileId2&quot;, uuid2);
 vars.put(&quot;userId&quot;, userId);
 vars.put(&quot;csrfToken&quot;, csrfToken);
-vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
+vars.put(&quot;relationshipId&quot;, relationshipId);
+vars.put(&quot;userOrgId&quot;, userOrgId);
+</stringProp>
         </BeanShellSampler>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Organisation Details HTTP Request" enabled="true">
-          <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
-          <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Retrieve Auth token for Organisations endpoint">
+          <stringProp name="HTTPSampler.domain">${ENTRA_STUB_HOST}</stringProp>
+          <stringProp name="HTTPSampler.port">${ENTRA_STUB_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
-          <stringProp name="HTTPSampler.path">/v1/apply/organisation</stringProp>
+          <stringProp name="HTTPSampler.path">/sign</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -198,6 +201,60 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">{&#xd;
+	&quot;clientId&quot;: &quot;clientId&quot;,&#xd;
+	&quot;username&quot;: &quot;ea@test.gov.uk&quot;&#xd;
+}&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">content-type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49586">200</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="access Token JSON Extractor">
+            <stringProp name="JSONPostProcessor.referenceNames">adminAccessToken</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.access_token</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+        </hashTree>
+        <CriticalSectionController guiclass="CriticalSectionControllerGui" testclass="CriticalSectionController" testname="Form Submission Controller">
+          <stringProp name="CriticalSectionController.lockName">global_lock</stringProp>
+        </CriticalSectionController>
+        <hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Organisation Details HTTP Request">
+            <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
+            <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
+            <stringProp name="HTTPSampler.path">/v1/apply/organisation</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&#xd;
   &quot;meta&quot;: {&#xd;
     &quot;schemaVersion&quot;: &quot;1&quot;,&#xd;
     &quot;timestamp&quot;: &quot;2025-10-08T16:25:35.824Z&quot;,&#xd;
@@ -1505,59 +1562,59 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
   }&#xd;
 }&#xd;
 </stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-            </collectionProp>
-          </elementProp>
-        </HTTPSamplerProxy>
-        <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
-            <collectionProp name="HeaderManager.headers">
-              <elementProp name="" elementType="Header">
-                <stringProp name="Header.name">content-type</stringProp>
-                <stringProp name="Header.value">application/json</stringProp>
-              </elementProp>
-            </collectionProp>
-          </HeaderManager>
-          <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
-              <stringProp name="49586">200</stringProp>
-            </collectionProp>
-            <stringProp name="Assertion.custom_message"></stringProp>
-            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
-            <boolProp name="Assertion.assume_success">false</boolProp>
-            <intProp name="Assertion.test_type">2</intProp>
-          </ResponseAssertion>
-          <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="orgId JSON Extractor" enabled="true">
-            <stringProp name="JSONPostProcessor.referenceNames">orgId</stringProp>
-            <stringProp name="JSONPostProcessor.jsonPathExprs">$.orgId</stringProp>
-            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
-          </JSONPostProcessor>
-          <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="refNo JSON Extractor" enabled="true">
-            <stringProp name="JSONPostProcessor.referenceNames">refNo</stringProp>
-            <stringProp name="JSONPostProcessor.jsonPathExprs">$.referenceNumber</stringProp>
-            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
-            <stringProp name="Scope.variable"></stringProp>
-          </JSONPostProcessor>
-          <hashTree/>
-        </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Registration Details HTTP Request" enabled="true">
-          <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
-          <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
-          <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
-          <stringProp name="HTTPSampler.path">/v1/apply/registration</stringProp>
-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-          <stringProp name="HTTPSampler.method">POST</stringProp>
-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-            <collectionProp name="Arguments.arguments">
-              <elementProp name="" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&#xd;
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+              <collectionProp name="HeaderManager.headers">
+                <elementProp name="" elementType="Header">
+                  <stringProp name="Header.name">content-type</stringProp>
+                  <stringProp name="Header.value">application/json</stringProp>
+                </elementProp>
+              </collectionProp>
+            </HeaderManager>
+            <hashTree/>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="49586">200</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">2</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="orgId JSON Extractor" enabled="true">
+              <stringProp name="JSONPostProcessor.referenceNames">orgId</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$.orgId</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="refNo JSON Extractor" enabled="true">
+              <stringProp name="JSONPostProcessor.referenceNames">refNo</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$.referenceNumber</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+              <stringProp name="Scope.variable"></stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
+          </hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Registration Details HTTP Request">
+            <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
+            <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
+            <stringProp name="HTTPSampler.path">/v1/apply/registration</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&#xd;
   &quot;meta&quot;: {&#xd;
     &quot;schemaVersion&quot;: &quot;1&quot;,&#xd;
     &quot;timestamp&quot;: &quot;2025-10-08T17:40:07.373Z&quot;,&#xd;
@@ -4743,46 +4800,46 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
   }&#xd;
 }&#xd;
 </stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-            </collectionProp>
-          </elementProp>
-        </HTTPSamplerProxy>
-        <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
-            <collectionProp name="HeaderManager.headers">
-              <elementProp name="" elementType="Header">
-                <stringProp name="Header.name">content-type</stringProp>
-                <stringProp name="Header.value">application/json</stringProp>
-              </elementProp>
-            </collectionProp>
-          </HeaderManager>
-          <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
-              <stringProp name="49587">201</stringProp>
-            </collectionProp>
-            <stringProp name="Assertion.custom_message"></stringProp>
-            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
-            <boolProp name="Assertion.assume_success">false</boolProp>
-            <intProp name="Assertion.test_type">2</intProp>
-          </ResponseAssertion>
-          <hashTree/>
-        </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Accreditation Details HTTP Request" enabled="true">
-          <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
-          <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
-          <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
-          <stringProp name="HTTPSampler.path">/v1/apply/accreditation</stringProp>
-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-          <stringProp name="HTTPSampler.method">POST</stringProp>
-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-            <collectionProp name="Arguments.arguments">
-              <elementProp name="" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&#xd;
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+              <collectionProp name="HeaderManager.headers">
+                <elementProp name="" elementType="Header">
+                  <stringProp name="Header.name">content-type</stringProp>
+                  <stringProp name="Header.value">application/json</stringProp>
+                </elementProp>
+              </collectionProp>
+            </HeaderManager>
+            <hashTree/>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="49587">201</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">2</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Accreditation Details HTTP Request">
+            <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
+            <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
+            <stringProp name="HTTPSampler.path">/v1/apply/accreditation</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&#xd;
   &quot;meta&quot;: {&#xd;
     &quot;schemaVersion&quot;: &quot;1&quot;,&#xd;
     &quot;timestamp&quot;: &quot;2025-10-08T17:53:08.213Z&quot;,&#xd;
@@ -5602,7 +5659,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
       &quot;kntTWV&quot;: &quot;${address}&quot;,&#xd;
       &quot;gWdCTX&quot;: &quot;${postcode}&quot;,&#xd;
       &quot;IaTELm&quot;: &quot;Glass (R5)&quot;,&#xd;
-      &quot;gQZpRd&quot;: &quot;Both&quot;,&#xd;
+      &quot;gQZpRd&quot;: &quot;Glass other&quot;,&#xd;
       &quot;xBWNGE&quot;: &quot;Up to 10000 tonnes&quot;,&#xd;
       &quot;LuybKn&quot;: &quot;1&quot;,&#xd;
       &quot;MckvxX&quot;: &quot;More detail for spend on new reprocessing infrastructure&quot;,&#xd;
@@ -5650,474 +5707,457 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
   }&#xd;
 }&#xd;
 </stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-            </collectionProp>
-          </elementProp>
-        </HTTPSamplerProxy>
-        <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
-            <collectionProp name="HeaderManager.headers">
-              <elementProp name="" elementType="Header">
-                <stringProp name="Header.name">content-type</stringProp>
-                <stringProp name="Header.value">application/json</stringProp>
-              </elementProp>
-            </collectionProp>
-          </HeaderManager>
-          <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
-              <stringProp name="49587">201</stringProp>
-            </collectionProp>
-            <stringProp name="Assertion.custom_message"></stringProp>
-            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
-            <boolProp name="Assertion.assume_success">false</boolProp>
-            <intProp name="Assertion.test_type">2</intProp>
-          </ResponseAssertion>
-          <hashTree/>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+              <collectionProp name="HeaderManager.headers">
+                <elementProp name="" elementType="Header">
+                  <stringProp name="Header.name">content-type</stringProp>
+                  <stringProp name="Header.value">application/json</stringProp>
+                </elementProp>
+              </collectionProp>
+            </HeaderManager>
+            <hashTree/>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="49587">201</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">2</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Migrate Organisation HTTP Request">
+            <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
+            <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
+            <stringProp name="HTTPSampler.path">/v1/dev/form-submissions/${refNo}/migrate</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+              <collectionProp name="Arguments.arguments"/>
+            </elementProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+              <collectionProp name="HeaderManager.headers">
+                <elementProp name="" elementType="Header">
+                  <stringProp name="Header.name">content-type</stringProp>
+                  <stringProp name="Header.value">application/json</stringProp>
+                </elementProp>
+                <elementProp name="" elementType="Header">
+                  <stringProp name="Header.name">Authorization</stringProp>
+                  <stringProp name="Header.value">Bearer ${adminAccessToken}</stringProp>
+                </elementProp>
+              </collectionProp>
+            </HeaderManager>
+            <hashTree/>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="49586">200</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">2</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get Organisation HTTP Request">
+            <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
+            <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
+            <stringProp name="HTTPSampler.path">/v1/organisations/${refNo}</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <stringProp name="HTTPSampler.method">GET</stringProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+              <collectionProp name="Arguments.arguments"/>
+            </elementProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+              <collectionProp name="HeaderManager.headers">
+                <elementProp name="" elementType="Header">
+                  <stringProp name="Header.name">content-type</stringProp>
+                  <stringProp name="Header.value">application/json</stringProp>
+                </elementProp>
+                <elementProp name="" elementType="Header">
+                  <stringProp name="Header.name">Authorization</stringProp>
+                  <stringProp name="Header.value">Bearer ${adminAccessToken}</stringProp>
+                </elementProp>
+              </collectionProp>
+            </HeaderManager>
+            <hashTree/>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="49586">200</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">2</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="registrationId JSON Extractor">
+              <stringProp name="JSONPostProcessor.referenceNames">registrationId</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$.registrations[0].id</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="accreditationId JSON Extractor">
+              <stringProp name="JSONPostProcessor.referenceNames">accreditationId</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$.accreditations[0].id</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="organisationId JSON Extractor">
+              <stringProp name="JSONPostProcessor.referenceNames">organisationId</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$.id</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
+          </hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Patch Organisations HTTP Request">
+            <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
+            <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
+            <stringProp name="HTTPSampler.path">/v1/dev/organisations/${refNo}</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <stringProp name="HTTPSampler.method">PATCH</stringProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&#xd;
+    &quot;organisation&quot;: {&#xd;
+        &quot;registrations&quot;: [&#xd;
+            {&#xd;
+                &quot;id&quot;: &quot;${registrationId}&quot;,&#xd;
+                &quot;status&quot;: &quot;approved&quot;,&#xd;
+                &quot;validFrom&quot;: &quot;2026-01-01&quot;,&#xd;
+                &quot;validTo&quot;: &quot;2029-01-01&quot;,&#xd;
+                &quot;registrationNumber&quot;: &quot;R25SR500050912GO&quot;,&#xd;
+                &quot;accreditationId&quot;: &quot;${accreditationId}&quot;,&#xd;
+                &quot;glassRecyclingProcess&quot;: [&#xd;
+                    &quot;glass_other&quot;&#xd;
+                ],&#xd;
+                &quot;reprocessingType&quot;: &quot;input&quot;&#xd;
+            }&#xd;
+        ],&#xd;
+        &quot;accreditations&quot;: [&#xd;
+            {&#xd;
+                &quot;id&quot;: &quot;${accreditationId}&quot;,&#xd;
+                &quot;status&quot;: &quot;approved&quot;,&#xd;
+                &quot;validFrom&quot;: &quot;2026-01-01&quot;,&#xd;
+                &quot;validTo&quot;: &quot;2029-01-01&quot;,&#xd;
+                &quot;accreditationNumber&quot;: &quot;ACC5066791GO&quot;,&#xd;
+                &quot;glassRecyclingProcess&quot;: [&#xd;
+                    &quot;glass_other&quot;&#xd;
+                ],&#xd;
+                &quot;reprocessingType&quot;: &quot;input&quot;&#xd;
+            }&#xd;
+        ],&#xd;
+        &quot;submitterContactDetails&quot;: {&#xd;
+            &quot;email&quot;: &quot;${email}&quot;&#xd;
+        },&#xd;
+        &quot;status&quot;: &quot;approved&quot;&#xd;
+    }&#xd;
+}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+              <collectionProp name="HeaderManager.headers">
+                <elementProp name="" elementType="Header">
+                  <stringProp name="Header.name">content-type</stringProp>
+                  <stringProp name="Header.value">application/json</stringProp>
+                </elementProp>
+              </collectionProp>
+            </HeaderManager>
+            <hashTree/>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="49586">200</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">2</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
         </hashTree>
-      </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Summary Logs Thread Group">
-        <intProp name="ThreadGroup.num_threads">50</intProp>
-        <intProp name="ThreadGroup.ramp_time">1</intProp>
-        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
-        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
-        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
-          <stringProp name="LoopController.loops">1</stringProp>
-          <boolProp name="LoopController.continue_forever">false</boolProp>
-        </elementProp>
-      </ThreadGroup>
-      <hashTree>
-        <OnceOnlyController guiclass="OnceOnlyControllerGui" testclass="OnceOnlyController" testname="Once Only Controller"/>
+        <CriticalSectionController guiclass="CriticalSectionControllerGui" testclass="CriticalSectionController" testname="Defra ID Stub Controller">
+          <stringProp name="CriticalSectionController.lockName">global_lock</stringProp>
+        </CriticalSectionController>
         <hashTree>
-          <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Lock email and filename together" enabled="true">
-            <stringProp name="cacheKey">true</stringProp>
-            <stringProp name="filename"></stringProp>
-            <stringProp name="parameters"></stringProp>
-            <stringProp name="script">// This runs once per thread, locks the CSV values for all iterations
-vars.put(&quot;email&quot;, vars.get(&quot;userEmail&quot;))
-vars.put(&quot;lockedFilename&quot;, vars.get(&quot;filename&quot;))
-
-log.info(&quot;Thread ${ctx.getThreadNum()} locked to email: ${vars.get(&apos;lockedEmail&apos;)}, file: ${vars.get(&apos;lockedFilename&apos;)}&quot;)</stringProp>
-            <stringProp name="scriptLanguage">groovy</stringProp>
-          </JSR223Sampler>
-          <hashTree/>
-        </hashTree>
-        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="DataGenerator" enabled="true">
-          <stringProp name="BeanShellSampler.query">import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.UUID;
-
-String[] firstNames = {&quot;James&quot;, &quot;Oliver&quot;, &quot;George&quot;, &quot;Noah&quot;, &quot;Arthur&quot;, &quot;Muhammad&quot;, &quot;Leo&quot;, &quot;Harry&quot;, &quot;Oscar&quot;, &quot;Archie&quot;,
-&quot;Amelia&quot;, &quot;Olivia&quot;, &quot;Isla&quot;, &quot;Ava&quot;, &quot;Mia&quot;, &quot;Grace&quot;, &quot;Sophia&quot;, &quot;Freya&quot;, &quot;Charlotte&quot;, &quot;Emily&quot;};
-
-String[] lastNames = {&quot;Smith&quot;, &quot;Jones&quot;, &quot;Taylor&quot;, &quot;Williams&quot;, &quot;Brown&quot;, &quot;Davies&quot;, &quot;Evans&quot;, &quot;Wilson&quot;, &quot;Thomas&quot;, &quot;Roberts&quot;,&quot;Johnson&quot;, &quot;Lewis&quot;, &quot;Walker&quot;, &quot;Robinson&quot;, &quot;Wood&quot;, &quot;Thompson&quot;, &quot;White&quot;, &quot;Watson&quot;, &quot;Jackson&quot;, &quot;Wright&quot;};
-
-
-String[] addresses = {
-    &quot;42 Victoria Street, London, SW1H 0NP&quot;,
-    &quot;15 Church Lane, Manchester, M1 2AB&quot;,
-    &quot;78 High Street, Birmingham, B2 4QA&quot;,
-    &quot;23 Mill Road, Edinburgh, EH4 3BB&quot;,
-    &quot;91 Oak Avenue, Bristol, BS1 6XY&quot;,
-    &quot;56 Kings Road, Liverpool, L1 9AA&quot;,
-    &quot;12 Station Road, Cardiff, CF10 1EP&quot;,
-    &quot;67 Park Lane, Leeds, LS1 2TW&quot;,
-    &quot;34 Queen&apos;s Drive, Glasgow, G12 0AA&quot;,
-    &quot;89 Castle Street, Newcastle, NE1 1RQ&quot;
-};
-
-String[] jobTitles = {
-    &quot;Software Developer&quot;, &quot;Marketing Manager&quot;, &quot;Sales Assistant&quot;, &quot;Project Manager&quot;, &quot;Data Analyst&quot;,
-    &quot;HR Coordinator&quot;, &quot;Financial Advisor&quot;, &quot;Graphic Designer&quot;, &quot;Operations Manager&quot;, &quot;Business Analyst&quot;,
-    &quot;Customer Service Representative&quot;, &quot;IT Support Specialist&quot;, &quot;Account Executive&quot;, &quot;Product Manager&quot;,
-    &quot;Quality Assurance Tester&quot;, &quot;Administrative Assistant&quot;, &quot;Research Scientist&quot;, &quot;Social Media Manager&quot;,
-    &quot;Network Engineer&quot;, &quot;Content Writer&quot;, &quot;Legal Assistant&quot;, &quot;Procurement Officer&quot;, &quot;Training Coordinator&quot;,
-    &quot;Systems Administrator&quot;, &quot;UX Designer&quot;
-};
-
-String[] mobilePrefixes = {&quot;07700&quot;, &quot;07701&quot;, &quot;07702&quot;, &quot;07703&quot;, &quot;07704&quot;, &quot;07705&quot;, &quot;07706&quot;, &quot;07707&quot;, &quot;07708&quot;, &quot;07709&quot;};
-
-String[] emailDomains = {&quot;fakeemail.com&quot;, &quot;defratesters.co.uk&quot;, &quot;morefaketesting.co.uk&quot;, &quot;defraperftest.com&quot;, &quot;defragovtest.com&quot;, &quot;testingfakeemails.com&quot;};
-
-String[] roles = {&quot;Reprocessor&quot;, &quot;Exporter&quot;, &quot;Reprocessor and exporter&quot;};
-
-String[] nations = {&quot;England&quot;, &quot;Northern Ireland&quot;, &quot;Scotland&quot;, &quot;Wales&quot;};
-
-String[] companies = {&quot;Testers Limited&quot;, &quot;Garbage Extinguishers Limited&quot;, &quot;Recyclers Limited&quot;, &quot;Exportations Limited&quot;, &quot;Acme Limited&quot;, &quot;Throwaway Limited&quot;, &quot;Producers Limited&quot;, &quot;Consumers Limited&quot;};
-
-
-String[] materials = {  &quot;Aluminium (R4)&quot;,
-  &quot;Fibre-based composite material (R3)&quot;,
-  &quot;Glass (R5)&quot;,
-  &quot;Paper or board (R3)&quot;,
-  &quot;Plastic (R3)&quot;,
-  &quot;Steel (R4)&quot;,
-  &quot;Wood (R3)&quot;
-};
-
-String[] tonnageBands = {
-  &quot;Up to 500 tonnes&quot;,
-  &quot;Up to 5,000 tonnes&quot;,
-  &quot;Up to 10,000 tonnes&quot;,
-  &quot;Over 10,000 tonnes&quot;
-};
-
-String[] suppliers = {
-  &quot;local council collections&quot;,
-  &quot;direct from producer&quot;,
-  &quot;material recovery facility&quot;
-};
-
-String[] permitTypes = {
-  &quot;Waste management licence or environmental permit&quot;,
-  &quot;Installation permit or Pollution Prevention and Control (PPC) permit&quot;,
-  &quot;Waste exemption&quot;
-};
-
-Random rand = new Random();
-
-String firstName = firstNames[rand.nextInt(firstNames.length)];
-String lastName = lastNames[rand.nextInt(lastNames.length)];
-String fullAddress = addresses[rand.nextInt(addresses.length)];
-String jobTitle = jobTitles[rand.nextInt(jobTitles.length)];
-
-String postcode = fullAddress.split(&quot;,&quot;)[2].trim();
-
-String company = companies[rand.nextInt(companies.length)];
-
-String role = roles[rand.nextInt(roles.length)];
-
-String material = materials[rand.nextInt(materials.length)];
-
-String tonnageBand = tonnageBands[rand.nextInt(tonnageBands.length)];
-
-String supplier = suppliers[rand.nextInt(suppliers.length)];
-String permitType = permitTypes[rand.nextInt(permitTypes.length)];
-
-String mobilePrefix = mobilePrefixes[rand.nextInt(mobilePrefixes.length)];
-int mobileNum = rand.nextInt(900000) + 100000;
-String mobileNumber = mobilePrefix + mobileNum;
-
-String emailDomain = emailDomains[rand.nextInt(emailDomains.length)];
-int emailNum = rand.nextInt(99) + 1;
-String email = firstName.toLowerCase() + &quot;.&quot; + lastName.toLowerCase() + emailNum + &quot;@&quot; + emailDomain;
-
-
-int randomInt = rand.nextInt(nations.length);
-
-String nationsString = nations[0];
-for (int i = 1; i &lt; randomInt &amp;&amp; i &lt; nations.length; i++) {
-    nationsString += &quot;, &quot; + nations[i];
-}
-
-String wasteRegNumber = &quot;CBDU&quot; + (rand.nextInt(900000) + 100000);
-
-long permitNumber = ThreadLocalRandom.current().nextLong(1000000000L, 10000000000L);
-String permitNo = &quot;&quot; + permitNumber;
-
-
-String reproPercentage = &quot;&quot; + rand.nextInt(100);
-String priceSupportPercentage = &quot;&quot; + rand.nextInt(100);
-String businessSupportPercentage = &quot;&quot; + rand.nextInt(100);
-String commsPercentage = &quot;&quot; + rand.nextInt(100);
-String developingNewMarketsPercentage = &quot;&quot; + rand.nextInt(100);
-String developingNewUsesPercentage = &quot;&quot; + rand.nextInt(100);
-String otherCategoriesPercentage = &quot;&quot; + rand.nextInt(100);
-
-String uuid1 = UUID.randomUUID().toString();
-String uuid2 = UUID.randomUUID().toString();
-
-String userId = UUID.randomUUID().toString();
-
-String csrfToken = UUID.randomUUID().toString();
-
-String relationshipId = UUID.randomUUID().toString();
-
-
-vars.put(&quot;firstName&quot;, firstName);
-vars.put(&quot;lastName&quot;, lastName);
-vars.put(&quot;fullName&quot;, firstName + &quot; &quot; + lastName);
-vars.put(&quot;email&quot;, email);
-vars.put(&quot;telephone&quot;, mobileNumber);
-vars.put(&quot;address&quot;, fullAddress);
-vars.put(&quot;postcode&quot;, postcode);
-vars.put(&quot;jobTitle&quot;, jobTitle);
-vars.put(&quot;city&quot;, fullAddress.split(&quot;, &quot;)[1]);
-vars.put(&quot;role&quot;, role);
-vars.put(&quot;nations&quot;, nationsString);
-vars.put(&quot;company&quot;, company);
-vars.put(&quot;material&quot;, material);
-vars.put(&quot;tonnageBand&quot;, tonnageBand);
-vars.put(&quot;supplier&quot;, supplier);
-vars.put(&quot;permitType&quot;, permitType);
-vars.put(&quot;wasteRegNumber&quot;, wasteRegNumber);
-vars.put(&quot;permitNumber&quot;, permitNo);
-vars.put(&quot;reproPercentage&quot;, reproPercentage);
-vars.put(&quot;priceSupportPercentage&quot;, priceSupportPercentage);
-vars.put(&quot;businessSupportPercentage&quot;, businessSupportPercentage);
-vars.put(&quot;commsPercentage&quot;, commsPercentage);
-vars.put(&quot;developingNewMarketsPercentage&quot;, developingNewMarketsPercentage);
-vars.put(&quot;developingNewUsesPercentage&quot;, developingNewUsesPercentage);
-vars.put(&quot;otherCategoriesPercentage&quot;, otherCategoriesPercentage);
-vars.put(&quot;fileId1&quot;, uuid1);
-vars.put(&quot;fileId2&quot;, uuid2);
-vars.put(&quot;userId&quot;, userId);
-vars.put(&quot;csrfToken&quot;, csrfToken);
-vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
-        </BeanShellSampler>
-        <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Defra ID Stub Register User" enabled="true">
-          <stringProp name="HTTPSampler.domain">${DEFRA_ID_STUB_HOST}</stringProp>
-          <stringProp name="HTTPSampler.port">${DEFRA_ID_STUB_PORT}</stringProp>
-          <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
-          <stringProp name="HTTPSampler.path">/cdp-defra-id-stub/API/register</stringProp>
-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-          <stringProp name="HTTPSampler.method">POST</stringProp>
-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-            <collectionProp name="Arguments.arguments">
-              <elementProp name="" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&#xd;
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Defra ID Stub Register User">
+            <stringProp name="HTTPSampler.domain">${DEFRA_ID_STUB_HOST}</stringProp>
+            <stringProp name="HTTPSampler.port">${DEFRA_ID_STUB_PORT}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
+            <stringProp name="HTTPSampler.path">/cdp-defra-id-stub/API/register</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&#xd;
     &quot;userId&quot;: &quot;${userId}&quot;,&#xd;
-    &quot;email&quot;: &quot;${userEmail}&quot;,&#xd;
-    &quot;firstName&quot;: &quot;${userFirstName}&quot;,&#xd;
-    &quot;lastName&quot;: &quot;${userLastName}&quot;,&#xd;
+    &quot;email&quot;: &quot;${email}&quot;,&#xd;
+    &quot;firstName&quot;: &quot;${firstName}&quot;,&#xd;
+    &quot;lastName&quot;: &quot;${lastName}&quot;,&#xd;
     &quot;loa&quot;: &quot;1&quot;,&#xd;
     &quot;aal&quot;: &quot;1&quot;,&#xd;
     &quot;enrolmentCount&quot;: 1,&#xd;
     &quot;enrolmentRequestCount&quot;: 1&#xd;
   }</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-            </collectionProp>
-          </elementProp>
-        </HTTPSamplerProxy>
-        <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
-            <collectionProp name="HeaderManager.headers">
-              <elementProp name="" elementType="Header">
-                <stringProp name="Header.name">content-type</stringProp>
-                <stringProp name="Header.value">application/json</stringProp>
-              </elementProp>
-            </collectionProp>
-          </HeaderManager>
-          <hashTree/>
-        </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Defra ID Stub Add Relationship">
-          <stringProp name="HTTPSampler.domain">${DEFRA_ID_STUB_HOST}</stringProp>
-          <stringProp name="HTTPSampler.port">${DEFRA_ID_STUB_PORT}</stringProp>
-          <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
-          <stringProp name="HTTPSampler.path">/cdp-defra-id-stub/register/${userId}/relationship</stringProp>
-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-          <stringProp name="HTTPSampler.method">POST</stringProp>
-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
-            <collectionProp name="Arguments.arguments">
-              <elementProp name="csrfToken" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">${csrfToken}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">csrfToken</stringProp>
-              </elementProp>
-              <elementProp name="userId" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">${userId}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">userId</stringProp>
-              </elementProp>
-              <elementProp name="relationshipId" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">${relationshipId}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">relationshipId</stringProp>
-              </elementProp>
-              <elementProp name="organisationId" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">${userOrgId}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">organisationId</stringProp>
-              </elementProp>
-              <elementProp name="organisationName" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">${company}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">organisationName</stringProp>
-              </elementProp>
-              <elementProp name="relationshipRole" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">role</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">relationshipRole</stringProp>
-              </elementProp>
-              <elementProp name="roleName" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">User</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">roleName</stringProp>
-              </elementProp>
-              <elementProp name="roleStatus" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">Status</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">roleStatus</stringProp>
-              </elementProp>
-              <elementProp name="redirect_uri" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">${HTTP_PROTOCOL}://${EPR_BACKEND_HOST}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">redirect_uri</stringProp>
-              </elementProp>
-            </collectionProp>
-          </elementProp>
-        </HTTPSamplerProxy>
-        <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
-            <collectionProp name="HeaderManager.headers">
-              <elementProp name="" elementType="Header">
-                <stringProp name="Header.name">content-type</stringProp>
-                <stringProp name="Header.value">application/x-www-form-urlencoded</stringProp>
-              </elementProp>
-            </collectionProp>
-          </HeaderManager>
-          <hashTree/>
-        </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Defra ID Stub Authorisation" enabled="true">
-          <stringProp name="HTTPSampler.domain">${DEFRA_ID_STUB_HOST}</stringProp>
-          <stringProp name="HTTPSampler.port">${DEFRA_ID_STUB_PORT}</stringProp>
-          <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
-          <stringProp name="HTTPSampler.path">/cdp-defra-id-stub/authorize</stringProp>
-          <stringProp name="HTTPSampler.method">GET</stringProp>
-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">true</boolProp>
-          <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
-            <collectionProp name="Arguments.arguments">
-              <elementProp name="user" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                <stringProp name="Argument.value">${userEmail}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">user</stringProp>
-              </elementProp>
-              <elementProp name="client_id" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                <stringProp name="Argument.value">63983fc2-cfff-45bb-8ec2-959e21062b9a</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">client_id</stringProp>
-              </elementProp>
-              <elementProp name="response_type" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                <stringProp name="Argument.value">code</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">response_type</stringProp>
-              </elementProp>
-              <elementProp name="redirect_uri" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                <stringProp name="Argument.value">${HTTP_PROTOCOL}://${EPR_BACKEND_HOST}/health</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">redirect_uri</stringProp>
-              </elementProp>
-              <elementProp name="state" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                <stringProp name="Argument.value">state</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">state</stringProp>
-              </elementProp>
-              <elementProp name="scope" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                <stringProp name="Argument.value">email</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">scope</stringProp>
-              </elementProp>
-            </collectionProp>
-          </elementProp>
-        </HTTPSamplerProxy>
-        <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
-            <collectionProp name="HeaderManager.headers">
-              <elementProp name="" elementType="Header">
-                <stringProp name="Header.name">content-type</stringProp>
-                <stringProp name="Header.value">application/x-www-form-urlencoded</stringProp>
-              </elementProp>
-            </collectionProp>
-          </HeaderManager>
-          <hashTree/>
-          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Defra ID Session Id Regular Expression Extractor" enabled="true">
-            <stringProp name="RegexExtractor.useHeaders">true</stringProp>
-            <stringProp name="RegexExtractor.refname">defraIdSessionId</stringProp>
-            <stringProp name="RegexExtractor.regex">sessionId=([^&amp;\s]+)</stringProp>
-            <stringProp name="RegexExtractor.template">$1$</stringProp>
-            <stringProp name="RegexExtractor.default"></stringProp>
-            <boolProp name="RegexExtractor.default_empty_value">false</boolProp>
-            <stringProp name="RegexExtractor.match_number">1</stringProp>
-          </RegexExtractor>
-          <hashTree/>
-        </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Defra ID Stub Generate Token" enabled="true">
-          <stringProp name="HTTPSampler.domain">${DEFRA_ID_STUB_HOST}</stringProp>
-          <stringProp name="HTTPSampler.port">${DEFRA_ID_STUB_PORT}</stringProp>
-          <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
-          <stringProp name="HTTPSampler.path">/cdp-defra-id-stub/token</stringProp>
-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-          <stringProp name="HTTPSampler.method">POST</stringProp>
-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-            <collectionProp name="Arguments.arguments">
-              <elementProp name="" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&#xd;
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+              <collectionProp name="HeaderManager.headers">
+                <elementProp name="" elementType="Header">
+                  <stringProp name="Header.name">content-type</stringProp>
+                  <stringProp name="Header.value">application/json</stringProp>
+                </elementProp>
+              </collectionProp>
+            </HeaderManager>
+            <hashTree/>
+          </hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Defra ID Stub Add Relationship">
+            <stringProp name="HTTPSampler.domain">${DEFRA_ID_STUB_HOST}</stringProp>
+            <stringProp name="HTTPSampler.port">${DEFRA_ID_STUB_PORT}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
+            <stringProp name="HTTPSampler.path">/cdp-defra-id-stub/register/${userId}/relationship</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="csrfToken" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">${csrfToken}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  <stringProp name="Argument.name">csrfToken</stringProp>
+                </elementProp>
+                <elementProp name="userId" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">${userId}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  <stringProp name="Argument.name">userId</stringProp>
+                </elementProp>
+                <elementProp name="relationshipId" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">${relationshipId}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  <stringProp name="Argument.name">relationshipId</stringProp>
+                </elementProp>
+                <elementProp name="organisationId" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">${userOrgId}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  <stringProp name="Argument.name">organisationId</stringProp>
+                </elementProp>
+                <elementProp name="organisationName" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">${company}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  <stringProp name="Argument.name">organisationName</stringProp>
+                </elementProp>
+                <elementProp name="relationshipRole" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">role</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  <stringProp name="Argument.name">relationshipRole</stringProp>
+                </elementProp>
+                <elementProp name="roleName" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">User</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  <stringProp name="Argument.name">roleName</stringProp>
+                </elementProp>
+                <elementProp name="roleStatus" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">Status</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  <stringProp name="Argument.name">roleStatus</stringProp>
+                </elementProp>
+                <elementProp name="redirect_uri" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">${HTTP_PROTOCOL}://${EPR_BACKEND_HOST}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  <stringProp name="Argument.name">redirect_uri</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+              <collectionProp name="HeaderManager.headers">
+                <elementProp name="" elementType="Header">
+                  <stringProp name="Header.name">content-type</stringProp>
+                  <stringProp name="Header.value">application/x-www-form-urlencoded</stringProp>
+                </elementProp>
+              </collectionProp>
+            </HeaderManager>
+            <hashTree/>
+          </hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Defra ID Stub Authorisation">
+            <stringProp name="HTTPSampler.domain">${DEFRA_ID_STUB_HOST}</stringProp>
+            <stringProp name="HTTPSampler.port">${DEFRA_ID_STUB_PORT}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
+            <stringProp name="HTTPSampler.path">/cdp-defra-id-stub/authorize</stringProp>
+            <stringProp name="HTTPSampler.method">GET</stringProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">true</boolProp>
+            <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="user" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">true</boolProp>
+                  <stringProp name="Argument.value">${email}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  <stringProp name="Argument.name">user</stringProp>
+                </elementProp>
+                <elementProp name="client_id" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">true</boolProp>
+                  <stringProp name="Argument.value">63983fc2-cfff-45bb-8ec2-959e21062b9a</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  <stringProp name="Argument.name">client_id</stringProp>
+                </elementProp>
+                <elementProp name="response_type" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">true</boolProp>
+                  <stringProp name="Argument.value">code</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  <stringProp name="Argument.name">response_type</stringProp>
+                </elementProp>
+                <elementProp name="redirect_uri" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">true</boolProp>
+                  <stringProp name="Argument.value">${HTTP_PROTOCOL}://${EPR_BACKEND_HOST}/health</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  <stringProp name="Argument.name">redirect_uri</stringProp>
+                </elementProp>
+                <elementProp name="state" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">true</boolProp>
+                  <stringProp name="Argument.value">state</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  <stringProp name="Argument.name">state</stringProp>
+                </elementProp>
+                <elementProp name="scope" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">true</boolProp>
+                  <stringProp name="Argument.value">email</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  <stringProp name="Argument.name">scope</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+              <collectionProp name="HeaderManager.headers">
+                <elementProp name="" elementType="Header">
+                  <stringProp name="Header.name">content-type</stringProp>
+                  <stringProp name="Header.value">application/x-www-form-urlencoded</stringProp>
+                </elementProp>
+              </collectionProp>
+            </HeaderManager>
+            <hashTree/>
+            <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Defra ID Session Id Regular Expression Extractor" enabled="true">
+              <stringProp name="RegexExtractor.useHeaders">true</stringProp>
+              <stringProp name="RegexExtractor.refname">defraIdSessionId</stringProp>
+              <stringProp name="RegexExtractor.regex">sessionId=([^&amp;\s]+)</stringProp>
+              <stringProp name="RegexExtractor.template">$1$</stringProp>
+              <stringProp name="RegexExtractor.default"></stringProp>
+              <boolProp name="RegexExtractor.default_empty_value">false</boolProp>
+              <stringProp name="RegexExtractor.match_number">1</stringProp>
+            </RegexExtractor>
+            <hashTree/>
+          </hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Defra ID Stub Generate Token">
+            <stringProp name="HTTPSampler.domain">${DEFRA_ID_STUB_HOST}</stringProp>
+            <stringProp name="HTTPSampler.port">${DEFRA_ID_STUB_PORT}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
+            <stringProp name="HTTPSampler.path">/cdp-defra-id-stub/token</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&#xd;
       &quot;client_id&quot;: &quot;63983fc2-cfff-45bb-8ec2-959e21062b9a&quot;,&#xd;
       &quot;client_secret&quot;: &quot;test_value&quot;,&#xd;
       &quot;grant_type&quot;: &quot;authorization_code&quot;,&#xd;
       &quot;code&quot;: &quot;${defraIdSessionId}&quot;&#xd;
     }</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-            </collectionProp>
-          </elementProp>
-        </HTTPSamplerProxy>
-        <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
-            <collectionProp name="HeaderManager.headers">
-              <elementProp name="" elementType="Header">
-                <stringProp name="Header.name">content-type</stringProp>
-                <stringProp name="Header.value">application/json</stringProp>
-              </elementProp>
-            </collectionProp>
-          </HeaderManager>
-          <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="Access Token JSON Extractor" enabled="true">
-            <stringProp name="JSONPostProcessor.referenceNames">accessToken</stringProp>
-            <stringProp name="JSONPostProcessor.jsonPathExprs">$.access_token</stringProp>
-            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
-            <stringProp name="Scope.variable"></stringProp>
-          </JSONPostProcessor>
-          <hashTree/>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+              <collectionProp name="HeaderManager.headers">
+                <elementProp name="" elementType="Header">
+                  <stringProp name="Header.name">content-type</stringProp>
+                  <stringProp name="Header.value">application/json</stringProp>
+                </elementProp>
+              </collectionProp>
+            </HeaderManager>
+            <hashTree/>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="Access Token JSON Extractor" enabled="true">
+              <stringProp name="JSONPostProcessor.referenceNames">accessToken</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$.access_token</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+              <stringProp name="Scope.variable"></stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
+          </hashTree>
         </hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Link User to Organisation ">
           <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
           <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
-          <stringProp name="HTTPSampler.path">/v1/organisations/${organisationId}/link</stringProp>
+          <stringProp name="HTTPSampler.path">/v1/organisations/${refNo}/link</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -6127,7 +6167,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">content-type</stringProp>
@@ -6141,7 +6181,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           </HeaderManager>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Summary Logs Initiate HTTP Request" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Summary Logs Initiate HTTP Request">
           <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
           <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -6199,7 +6239,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="CDP Uploader HTTP Request" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="CDP Uploader HTTP Request">
           <stringProp name="HTTPSampler.domain">${CDP_UPLOADER_HOST}</stringProp>
           <stringProp name="HTTPSampler.port">${CDP_UPLOADER_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -6208,9 +6248,9 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
           <elementProp name="HTTPsampler.Files" elementType="HTTPFileArgs">
             <collectionProp name="HTTPFileArgs.files">
-              <elementProp name="${lockedFilename}" elementType="HTTPFileArg">
+              <elementProp name="spreadsheet.xlsx" elementType="HTTPFileArg">
                 <stringProp name="File.mimetype">application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</stringProp>
-                <stringProp name="File.path">${lockedFilename}</stringProp>
+                <stringProp name="File.path">spreadsheet.xlsx</stringProp>
                 <stringProp name="File.paramname"></stringProp>
               </elementProp>
             </collectionProp>
@@ -6221,7 +6261,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">content-type</stringProp>
@@ -6229,12 +6269,12 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
               </elementProp>
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">x-filename</stringProp>
-                <stringProp name="Header.value">${lockedFilename}</stringProp>
+                <stringProp name="Header.value">spreadsheet.xlsx</stringProp>
               </elementProp>
             </collectionProp>
           </HeaderManager>
           <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="50549">302</stringProp>
             </collectionProp>
@@ -6245,11 +6285,11 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
-        <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="Check CDP Uploader Status" enabled="true">
+        <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="Check CDP Uploader Status">
           <stringProp name="WhileController.condition">${__groovy(!vars.get(&quot;uploadStatus&quot;).equals(&quot;ready&quot;) &amp;&amp; vars.get(&quot;counter&quot;).toInteger() &lt; vars.get(&quot;maxAttempts&quot;).toInteger())}</stringProp>
         </WhileController>
         <hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="CDP Uploader Status HTTP Request" enabled="true">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="CDP Uploader Status HTTP Request">
             <stringProp name="HTTPSampler.domain">${CDP_UPLOADER_HOST}</stringProp>
             <stringProp name="HTTPSampler.port">${CDP_UPLOADER_PORT}</stringProp>
             <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -6263,48 +6303,48 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
             </elementProp>
           </HTTPSamplerProxy>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="uploadStatus JSON Extractor" enabled="true">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="uploadStatus JSON Extractor">
             <stringProp name="JSONPostProcessor.referenceNames">uploadStatus</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.uploadStatus</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="s3Bucket  JSON Extractor" enabled="true">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="s3Bucket  JSON Extractor">
             <stringProp name="JSONPostProcessor.referenceNames">s3Bucket</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.form.file.s3Bucket</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="s3Key JSON Extractor" enabled="true">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="s3Key JSON Extractor">
             <stringProp name="JSONPostProcessor.referenceNames">s3Key</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.form.file.s3Key</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="fileId JSON Extractor" enabled="true">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="fileId JSON Extractor">
             <stringProp name="JSONPostProcessor.referenceNames">fileId</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.form.file.fileId</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="filename JSON Extractor" enabled="true">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="filename JSON Extractor">
             <stringProp name="JSONPostProcessor.referenceNames">filename</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.form.file.filename</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="fileStatus JSON Extractor" enabled="true">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="fileStatus JSON Extractor">
             <stringProp name="JSONPostProcessor.referenceNames">fileStatus</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.form.file.fileStatus</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
+          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer">
             <stringProp name="ConstantTimer.delay">1000</stringProp>
             <stringProp name="TestPlan.comments">Delay between CDP Uploader status polling</stringProp>
           </ConstantTimer>
           <hashTree/>
-          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Loop counter PostProcessor" enabled="true">
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Loop counter PostProcessor">
             <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
@@ -6314,7 +6354,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           </JSR223PostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Summary Logs Upload Completed HTTP Request" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Summary Logs Upload Completed HTTP Request">
           <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
           <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -6331,7 +6371,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
     &quot;form&quot;: {&#xd;
         &quot;summaryLogUpload&quot;: {&#xd;
             &quot;fileId&quot;: &quot;${fileId}&quot;,&#xd;
-            &quot;filename&quot;: &quot;${lockedFilename}&quot;,&#xd;
+            &quot;filename&quot;: &quot;spreadsheet.xlsx&quot;,&#xd;
             &quot;fileStatus&quot;: &quot;${fileStatus}&quot;,&#xd;
             &quot;s3Bucket&quot;: &quot;${s3Bucket}&quot;,&#xd;
             &quot;s3Key&quot;: &quot;${s3Key}&quot;&#xd;
@@ -6344,7 +6384,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">content-type</stringProp>
@@ -6353,7 +6393,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
             </collectionProp>
           </HeaderManager>
           <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="49588">202</stringProp>
             </collectionProp>
@@ -6364,11 +6404,11 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
-        <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="Check Summary Log Status" enabled="true">
+        <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="Check Summary Log Status">
           <stringProp name="WhileController.condition">${__groovy(!vars.get(&quot;summaryLogStatus&quot;).equals(&quot;validated&quot;) &amp;&amp; vars.get(&quot;slCounter&quot;).toInteger() &lt; vars.get(&quot;maxAttempts&quot;).toInteger())}</stringProp>
         </WhileController>
         <hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Summary Log Status HTTP Request" enabled="true">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Summary Log Status HTTP Request">
             <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
             <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
             <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -6382,7 +6422,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
             </elementProp>
           </HTTPSamplerProxy>
           <hashTree/>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">content-type</stringProp>
@@ -6395,13 +6435,13 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
             </collectionProp>
           </HeaderManager>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="summaryLogStatus JSON Extractor" enabled="true">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="summaryLogStatus JSON Extractor">
             <stringProp name="JSONPostProcessor.referenceNames">summaryLogStatus</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.status</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
+          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer">
             <stringProp name="ConstantTimer.delay">1000</stringProp>
             <stringProp name="TestPlan.comments">Delay between Summary Log status polling</stringProp>
           </ConstantTimer>
@@ -6416,7 +6456,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           </JSR223PostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Summary Logs Submission HTTP Request" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Summary Logs Submission HTTP Request">
           <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
           <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -6430,7 +6470,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">content-type</stringProp>
@@ -6444,20 +6484,8 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           </HeaderManager>
           <hashTree/>
         </hashTree>
-        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config">
-          <stringProp name="delimiter">,</stringProp>
-          <stringProp name="fileEncoding"></stringProp>
-          <stringProp name="filename">testinput.csv</stringProp>
-          <boolProp name="ignoreFirstLine">false</boolProp>
-          <boolProp name="quotedData">false</boolProp>
-          <boolProp name="recycle">true</boolProp>
-          <stringProp name="shareMode">shareMode.all</stringProp>
-          <boolProp name="stopThread">false</boolProp>
-          <stringProp name="variableNames"></stringProp>
-        </CSVDataSet>
-        <hashTree/>
       </hashTree>
-      <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
+      <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
           <name>saveConfig</name>
@@ -6494,7 +6522,7 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
         <stringProp name="filename">report.csv</stringProp>
       </ResultCollector>
       <hashTree/>
-      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
           <name>saveConfig</name>
@@ -6584,6 +6612,16 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
             <stringProp name="Argument.value">0</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="ENTRA_STUB_HOST" elementType="Argument">
+            <stringProp name="Argument.name">ENTRA_STUB_HOST</stringProp>
+            <stringProp name="Argument.value">epr-re-ex-entra-stub.${__P(env)}.cdp-int.defra.cloud</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="ENTRA_STUB_PORT" elementType="Argument">
+            <stringProp name="Argument.name">ENTRA_STUB_PORT</stringProp>
+            <stringProp name="Argument.value">443</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
         </collectionProp>
         <stringProp name="TestPlan.comments">To be enabled as default and disabled when testing locally</stringProp>
       </Arguments>
@@ -6639,6 +6677,16 @@ vars.put(&quot;relationshipId&quot;, relationshipId);</stringProp>
           <elementProp name="slCounter" elementType="Argument">
             <stringProp name="Argument.name">slCounter</stringProp>
             <stringProp name="Argument.value">0</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="ENTRA_STUB_HOST" elementType="Argument">
+            <stringProp name="Argument.name">ENTRA_STUB_HOST</stringProp>
+            <stringProp name="Argument.value">localhost</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="ENTRA_STUB_PORT" elementType="Argument">
+            <stringProp name="Argument.name">ENTRA_STUB_PORT</stringProp>
+            <stringProp name="Argument.value">3010</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
