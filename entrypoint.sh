@@ -21,6 +21,8 @@ LOGFILE=${JM_LOGS}/perftest-${TEST_SCENARIO}.log
 # Set THREAD_COUNT based on PROFILE
 if [ "$PROFILE" = "max" ]; then
     THREAD_COUNT=200
+elif [ "$PROFILE" = "mid" ]; then
+    THREAD_COUNT=100
 else
     THREAD_COUNT=50
 fi
