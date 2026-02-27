@@ -192,6 +192,9 @@ vars.put(&quot;userOrgId&quot;, userOrgId);
         <OnceOnlyController guiclass="OnceOnlyControllerGui" testclass="OnceOnlyController" testname="Once Only Controller"/>
         <hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Retrieve Auth token for Cognito">
+            <stringProp name="HTTPSampler.proxyScheme">http</stringProp>
+            <stringProp name="HTTPSampler.proxyHost">localhost</stringProp>
+            <intProp name="HTTPSampler.proxyPort">3128</intProp>
             <stringProp name="HTTPSampler.domain">${COGNITO_AUTH_URL}</stringProp>
             <stringProp name="HTTPSampler.port">${COGNITO_AUTH_PORT}</stringProp>
             <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
