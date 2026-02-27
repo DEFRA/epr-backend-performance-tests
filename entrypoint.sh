@@ -28,7 +28,7 @@ else
 fi
 
 # Run the test suite
-jmeter -n -t ${SCENARIOFILE} -e -l "${REPORTFILE}" -o ${JM_REPORTS} -j ${LOGFILE} -f -Jenv="${ENVIRONMENT}" -JthreadCount="${THREAD_COUNT}"
+jmeter -n -t ${SCENARIOFILE} -e -l "${REPORTFILE}" -o ${JM_REPORTS} -j ${LOGFILE} -f -Jenv="${ENVIRONMENT}" -JthreadCount="${THREAD_COUNT}" -JcognitoId="${COGNITO_CLIENT_ID}" -JcognitoSecret="${COGNITO_CLIENT_SECRET}"
 test_exit_code=$?
 
 # Publish the results into S3 so they can be displayed in the CDP Portal
