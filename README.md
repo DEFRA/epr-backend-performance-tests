@@ -15,32 +15,23 @@ A successful build results in a Docker container that is capable of running your
 The performance test suites are designed to be run from the CDP Portal.
 The CDP Platform runs test suites in much the same way it runs any other service, it takes a docker image and runs it as an ECS task, automatically provisioning infrastructure as required.
 
-## Local Testing with LocalStack
+## Local Testing
 
-### Build a new Docker image
+### Launch the required services using epr-re-ex-service
+
+Ensure you have the latest version of [epr-re-ex-service](https://github.com/DEFRA/epr-re-ex-service) checked out.
+
 ```
-docker build . -t my-performance-tests
+docker compose -f compose.yml --profile all up -d
 ```
-### Create a Localstack bucket
-```
-aws --endpoint-url=localhost:4566 s3 mb s3://my-bucket
-```
+
+This will launch the required services for local testing.
 
 ### Run performance tests
 
-```
-docker run \
--e S3_ENDPOINT='http://host.docker.internal:4566' \
--e RESULTS_OUTPUT_S3_PATH='s3://my-bucket' \
--e AWS_ACCESS_KEY_ID='test' \
--e AWS_SECRET_ACCESS_KEY='test' \
--e AWS_SECRET_KEY='test' \
--e AWS_REGION='eu-west-2' \
-my-performance-tests
-```
+Download [JMeter](https://jmeter.apache.org/download_jmeter.cgi) and launch the JMeter GUI. Load the `epr-backend-test.jmx` file from this repository into JMeter.
 
-docker run -e S3_ENDPOINT='http://host.docker.internal:4566' -e RESULTS_OUTPUT_S3_PATH='s3://cdp-infra-dev-test-results/cdp-portal-perf-tests/95a01432-8f47-40d2-8233-76514da2236a' -e AWS_ACCESS_KEY_ID='test' -e AWS_SECRET_ACCESS_KEY='test' -e AWS_SECRET_KEY='test' -e AWS_REGION='eu-west-2' -e ENVIRONMENT='perf-test' my-performance-tests
-
+Enable "Local User Defined Variables" and disable "Environment User Defined Variables" to run the tests. Ensure to disable "Local User Defined Variables" and re-enable "Environment User Defined Variables" when you are done..
 
 ## Licence
 
