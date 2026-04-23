@@ -5,6 +5,8 @@
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
         <collectionProp name="Arguments.arguments"/>
       </elementProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
     </TestPlan>
     <hashTree>
       <SetupThreadGroup guiclass="SetupThreadGroupGui" testclass="SetupThreadGroup" testname="setUp Thread Group">
@@ -57,7 +59,7 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">Content-Type</stringProp>
@@ -66,7 +68,7 @@
             </collectionProp>
           </HeaderManager>
           <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion">
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="49586">200</stringProp>
             </collectionProp>
@@ -104,7 +106,7 @@ props.put(&quot;COGNITO_ACCESS_TOKEN&quot;, token)</stringProp>
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="DataGenerator">
+        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="DataGenerator" enabled="true">
           <stringProp name="BeanShellSampler.query">import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.UUID;
@@ -273,7 +275,7 @@ vars.put(&quot;userOrgId&quot;, userOrgId);
 </stringProp>
         </BeanShellSampler>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Retrieve Auth token for Organisations endpoint">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Retrieve Auth token for Organisations endpoint" enabled="true">
           <stringProp name="HTTPSampler.domain">${ENTRA_STUB_HOST}</stringProp>
           <stringProp name="HTTPSampler.port">${ENTRA_STUB_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -297,7 +299,7 @@ vars.put(&quot;userOrgId&quot;, userOrgId);
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">content-type</stringProp>
@@ -306,7 +308,7 @@ vars.put(&quot;userOrgId&quot;, userOrgId);
             </collectionProp>
           </HeaderManager>
           <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion">
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="49586">200</stringProp>
             </collectionProp>
@@ -316,18 +318,18 @@ vars.put(&quot;userOrgId&quot;, userOrgId);
             <intProp name="Assertion.test_type">2</intProp>
           </ResponseAssertion>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="access Token JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="access Token JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">adminAccessToken</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.access_token</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <CriticalSectionController guiclass="CriticalSectionControllerGui" testclass="CriticalSectionController" testname="Form Submission Controller">
+        <CriticalSectionController guiclass="CriticalSectionControllerGui" testclass="CriticalSectionController" testname="Form Submission Controller" enabled="true">
           <stringProp name="CriticalSectionController.lockName">global_lock</stringProp>
         </CriticalSectionController>
         <hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Organisation Details HTTP Request">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Organisation Details HTTP Request" enabled="true">
             <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
             <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
             <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -1687,7 +1689,7 @@ vars.put(&quot;userOrgId&quot;, userOrgId);
             </JSONPostProcessor>
             <hashTree/>
           </hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Registration Details HTTP Request">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Registration Details HTTP Request" enabled="true">
             <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
             <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
             <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -4912,7 +4914,7 @@ vars.put(&quot;userOrgId&quot;, userOrgId);
             </ResponseAssertion>
             <hashTree/>
           </hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Accreditation Details HTTP Request">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Accreditation Details HTTP Request" enabled="true">
             <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
             <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
             <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -5819,7 +5821,7 @@ vars.put(&quot;userOrgId&quot;, userOrgId);
             </ResponseAssertion>
             <hashTree/>
           </hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Migrate Organisation HTTP Request">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Migrate Organisation HTTP Request" enabled="true">
             <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
             <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
             <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -5857,7 +5859,7 @@ vars.put(&quot;userOrgId&quot;, userOrgId);
             </ResponseAssertion>
             <hashTree/>
           </hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get Organisation HTTP Request">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get Organisation HTTP Request" enabled="true">
             <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
             <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
             <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -5871,7 +5873,7 @@ vars.put(&quot;userOrgId&quot;, userOrgId);
             </elementProp>
           </HTTPSamplerProxy>
           <hashTree>
-            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
               <collectionProp name="HeaderManager.headers">
                 <elementProp name="" elementType="Header">
                   <stringProp name="Header.name">content-type</stringProp>
@@ -5884,7 +5886,7 @@ vars.put(&quot;userOrgId&quot;, userOrgId);
               </collectionProp>
             </HeaderManager>
             <hashTree/>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion">
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
               <collectionProp name="Asserion.test_strings">
                 <stringProp name="49586">200</stringProp>
               </collectionProp>
@@ -5894,25 +5896,25 @@ vars.put(&quot;userOrgId&quot;, userOrgId);
               <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
-            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="registrationId JSON Extractor">
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="registrationId JSON Extractor" enabled="true">
               <stringProp name="JSONPostProcessor.referenceNames">registrationId</stringProp>
               <stringProp name="JSONPostProcessor.jsonPathExprs">$.registrations[0].id</stringProp>
               <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
             </JSONPostProcessor>
             <hashTree/>
-            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="accreditationId JSON Extractor">
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="accreditationId JSON Extractor" enabled="true">
               <stringProp name="JSONPostProcessor.referenceNames">accreditationId</stringProp>
               <stringProp name="JSONPostProcessor.jsonPathExprs">$.accreditations[0].id</stringProp>
               <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
             </JSONPostProcessor>
             <hashTree/>
-            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="organisationId JSON Extractor">
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="organisationId JSON Extractor" enabled="true">
               <stringProp name="JSONPostProcessor.referenceNames">organisationId</stringProp>
               <stringProp name="JSONPostProcessor.jsonPathExprs">$.id</stringProp>
               <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
             </JSONPostProcessor>
             <hashTree/>
-            <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor">
+            <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor" enabled="true">
               <stringProp name="scriptLanguage">groovy</stringProp>
               <stringProp name="parameters"></stringProp>
               <stringProp name="filename"></stringProp>
@@ -5921,7 +5923,7 @@ vars.put(&quot;userOrgId&quot;, userOrgId);
             </JSR223PostProcessor>
             <hashTree/>
           </hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="PUT Organisations HTTP Request">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="PUT Organisations HTTP Request" enabled="true">
             <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
             <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
             <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -5944,7 +5946,7 @@ vars.put(&quot;userOrgId&quot;, userOrgId);
             </elementProp>
           </HTTPSamplerProxy>
           <hashTree>
-            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
               <collectionProp name="HeaderManager.headers">
                 <elementProp name="" elementType="Header">
                   <stringProp name="Header.name">content-type</stringProp>
@@ -5953,7 +5955,7 @@ vars.put(&quot;userOrgId&quot;, userOrgId);
               </collectionProp>
             </HeaderManager>
             <hashTree/>
-            <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="JSR223 PreProcessor">
+            <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="JSR223 PreProcessor" enabled="true">
               <stringProp name="cacheKey">true</stringProp>
               <stringProp name="filename"></stringProp>
               <stringProp name="parameters"></stringProp>
@@ -5991,7 +5993,7 @@ vars.put(&quot;modifiedPayload&quot;, JsonOutput.toJson(payload))</stringProp>
               <stringProp name="scriptLanguage">groovy</stringProp>
             </JSR223PreProcessor>
             <hashTree/>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion">
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
               <collectionProp name="Asserion.test_strings">
                 <stringProp name="49586">200</stringProp>
               </collectionProp>
@@ -6003,7 +6005,7 @@ vars.put(&quot;modifiedPayload&quot;, JsonOutput.toJson(payload))</stringProp>
             <hashTree/>
           </hashTree>
         </hashTree>
-        <CriticalSectionController guiclass="CriticalSectionControllerGui" testclass="CriticalSectionController" testname="Defra ID Stub Controller">
+        <CriticalSectionController guiclass="CriticalSectionControllerGui" testclass="CriticalSectionController" testname="Defra ID Stub Controller" enabled="true">
           <stringProp name="CriticalSectionController.lockName">global_lock</stringProp>
         </CriticalSectionController>
         <hashTree>
@@ -6254,7 +6256,7 @@ vars.put(&quot;modifiedPayload&quot;, JsonOutput.toJson(payload))</stringProp>
             <hashTree/>
           </hashTree>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Link User to Organisation ">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Link User to Organisation " enabled="true">
           <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
           <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -6268,7 +6270,7 @@ vars.put(&quot;modifiedPayload&quot;, JsonOutput.toJson(payload))</stringProp>
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">content-type</stringProp>
@@ -6282,7 +6284,7 @@ vars.put(&quot;modifiedPayload&quot;, JsonOutput.toJson(payload))</stringProp>
           </HeaderManager>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Summary Logs Initiate HTTP Request">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Summary Logs Initiate HTTP Request" enabled="true">
           <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
           <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -6340,7 +6342,7 @@ vars.put(&quot;modifiedPayload&quot;, JsonOutput.toJson(payload))</stringProp>
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="CDP Uploader HTTP Request">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="CDP Uploader HTTP Request" enabled="true">
           <stringProp name="HTTPSampler.domain">${CDP_UPLOADER_HOST}</stringProp>
           <stringProp name="HTTPSampler.port">${CDP_UPLOADER_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -6386,11 +6388,11 @@ vars.put(&quot;modifiedPayload&quot;, JsonOutput.toJson(payload))</stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
-        <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="Check CDP Uploader Status">
+        <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="Check CDP Uploader Status" enabled="true">
           <stringProp name="WhileController.condition">${__groovy(!vars.get(&quot;uploadStatus&quot;).equals(&quot;ready&quot;) &amp;&amp; vars.get(&quot;counter&quot;).toInteger() &lt; vars.get(&quot;maxAttempts&quot;).toInteger())}</stringProp>
         </WhileController>
         <hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="CDP Uploader Status HTTP Request">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="CDP Uploader Status HTTP Request" enabled="true">
             <stringProp name="HTTPSampler.domain">${CDP_UPLOADER_HOST}</stringProp>
             <stringProp name="HTTPSampler.port">${CDP_UPLOADER_PORT}</stringProp>
             <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -6404,48 +6406,48 @@ vars.put(&quot;modifiedPayload&quot;, JsonOutput.toJson(payload))</stringProp>
             </elementProp>
           </HTTPSamplerProxy>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="uploadStatus JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="uploadStatus JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">uploadStatus</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.uploadStatus</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="s3Bucket  JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="s3Bucket  JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">s3Bucket</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.form.file.s3Bucket</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="s3Key JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="s3Key JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">s3Key</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.form.file.s3Key</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="fileId JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="fileId JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">fileId</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.form.file.fileId</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="filename JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="filename JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">filename</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.form.file.filename</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="fileStatus JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="fileStatus JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">fileStatus</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.form.file.fileStatus</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer">
+          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
             <stringProp name="ConstantTimer.delay">1000</stringProp>
             <stringProp name="TestPlan.comments">Delay between CDP Uploader status polling</stringProp>
           </ConstantTimer>
           <hashTree/>
-          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Loop counter PostProcessor">
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Loop counter PostProcessor" enabled="true">
             <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
@@ -6455,7 +6457,7 @@ vars.put(&quot;modifiedPayload&quot;, JsonOutput.toJson(payload))</stringProp>
           </JSR223PostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Summary Logs Upload Completed HTTP Request">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Summary Logs Upload Completed HTTP Request" enabled="true">
           <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
           <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -6485,7 +6487,7 @@ vars.put(&quot;modifiedPayload&quot;, JsonOutput.toJson(payload))</stringProp>
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">content-type</stringProp>
@@ -6495,11 +6497,11 @@ vars.put(&quot;modifiedPayload&quot;, JsonOutput.toJson(payload))</stringProp>
           </HeaderManager>
           <hashTree/>
         </hashTree>
-        <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="Check Summary Log Status">
+        <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="Check Summary Log Status" enabled="true">
           <stringProp name="WhileController.condition">${__groovy(!vars.get(&quot;summaryLogStatus&quot;).equals(&quot;validated&quot;) &amp;&amp; vars.get(&quot;slCounter&quot;).toInteger() &lt; vars.get(&quot;maxAttempts&quot;).toInteger())}</stringProp>
         </WhileController>
         <hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Summary Log Status HTTP Request">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Summary Log Status HTTP Request" enabled="true">
             <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
             <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
             <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -6513,7 +6515,7 @@ vars.put(&quot;modifiedPayload&quot;, JsonOutput.toJson(payload))</stringProp>
             </elementProp>
           </HTTPSamplerProxy>
           <hashTree/>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">content-type</stringProp>
@@ -6526,18 +6528,18 @@ vars.put(&quot;modifiedPayload&quot;, JsonOutput.toJson(payload))</stringProp>
             </collectionProp>
           </HeaderManager>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="summaryLogStatus JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="summaryLogStatus JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">summaryLogStatus</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.status</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer">
+          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
             <stringProp name="ConstantTimer.delay">1000</stringProp>
             <stringProp name="TestPlan.comments">Delay between Summary Log status polling</stringProp>
           </ConstantTimer>
           <hashTree/>
-          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Loop counter PostProcessor">
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Loop counter PostProcessor" enabled="true">
             <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
@@ -6546,7 +6548,7 @@ vars.put(&quot;modifiedPayload&quot;, JsonOutput.toJson(payload))</stringProp>
             <stringProp name="TestPlan.comments">To prevent loop from going indefinitely</stringProp>
           </JSR223PostProcessor>
           <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion">
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="49586">200</stringProp>
             </collectionProp>
@@ -6585,11 +6587,11 @@ vars.put(&quot;modifiedPayload&quot;, JsonOutput.toJson(payload))</stringProp>
           </HeaderManager>
           <hashTree/>
         </hashTree>
-        <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="Check Summary Log Submission Status">
+        <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="Check Summary Log Submission Status" enabled="true">
           <stringProp name="WhileController.condition">${__groovy(!vars.get(&quot;summaryLogSubmissionStatus&quot;).equals(&quot;submitted&quot;) &amp;&amp; vars.get(&quot;slSubmitCounter&quot;).toInteger() &lt; vars.get(&quot;maxAttempts&quot;).toInteger())}</stringProp>
         </WhileController>
         <hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Summary Log Status HTTP Request">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Summary Log Status HTTP Request" enabled="true">
             <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
             <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
             <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -6603,7 +6605,7 @@ vars.put(&quot;modifiedPayload&quot;, JsonOutput.toJson(payload))</stringProp>
             </elementProp>
           </HTTPSamplerProxy>
           <hashTree/>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">content-type</stringProp>
@@ -6616,18 +6618,18 @@ vars.put(&quot;modifiedPayload&quot;, JsonOutput.toJson(payload))</stringProp>
             </collectionProp>
           </HeaderManager>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="summaryLogStatus JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="summaryLogStatus JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">summaryLogSubmissionStatus</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.status</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer">
+          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
             <stringProp name="ConstantTimer.delay">1000</stringProp>
             <stringProp name="TestPlan.comments">Delay between Summary Log status polling</stringProp>
           </ConstantTimer>
           <hashTree/>
-          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Loop counter PostProcessor">
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Loop counter PostProcessor" enabled="true">
             <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
@@ -6637,7 +6639,7 @@ vars.put(&quot;modifiedPayload&quot;, JsonOutput.toJson(payload))</stringProp>
           </JSR223PostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Create PRN HTTP Request" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Create PRN HTTP Request">
           <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
           <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -6664,7 +6666,7 @@ vars.put(&quot;modifiedPayload&quot;, JsonOutput.toJson(payload))</stringProp>
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">content-type</stringProp>
@@ -6694,7 +6696,7 @@ vars.put(&quot;modifiedPayload&quot;, JsonOutput.toJson(payload))</stringProp>
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Update PRN status to awaiting_authorisation HTTP Request" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Update PRN status to awaiting_authorisation HTTP Request">
           <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
           <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -6716,7 +6718,7 @@ vars.put(&quot;modifiedPayload&quot;, JsonOutput.toJson(payload))</stringProp>
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">content-type</stringProp>
@@ -6740,7 +6742,7 @@ vars.put(&quot;modifiedPayload&quot;, JsonOutput.toJson(payload))</stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Update PRN status to awaiting_acceptance HTTP Request" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Update PRN status to awaiting_acceptance HTTP Request">
           <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
           <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
@@ -6814,7 +6816,7 @@ vars.put(&quot;modifiedPayload&quot;, JsonOutput.toJson(payload))</stringProp>
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">content-type</stringProp>
@@ -6827,9 +6829,229 @@ vars.put(&quot;modifiedPayload&quot;, JsonOutput.toJson(payload))</stringProp>
             </collectionProp>
           </HeaderManager>
           <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion">
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="49590">204</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Create Report HTTP Request">
+          <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
+          <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
+          <stringProp name="HTTPSampler.path">/v1/organisations/${organisationId}/registrations/${registrationId}/reports/2026/monthly/3</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">content-type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Authorization</stringProp>
+                <stringProp name="Header.value">Bearer ${accessToken}</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49587">201</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Update Report  HTTP Request">
+          <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
+          <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
+          <stringProp name="HTTPSampler.path">/v1/organisations/${organisationId}/registrations/${registrationId}/reports/2026/monthly/3</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">PATCH</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+	&quot;tonnageRecycled&quot;: 0,&#xd;
+	&quot;tonnageNotRecycled&quot;: 0,&#xd;
+	&quot;prnRevenue&quot;: 123.4,&#xd;
+	&quot;freeTonnage&quot;: 0&#xd;
+}&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">content-type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Authorization</stringProp>
+                <stringProp name="Header.value">Bearer ${accessToken}</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49586">200</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Update Report Status - ready_to_submit - HTTP Request">
+          <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
+          <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
+          <stringProp name="HTTPSampler.path">/v1/organisations/${organisationId}/registrations/${registrationId}/reports/2026/monthly/3/status</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{ &#xd;
+	&quot;status&quot;: &quot;ready_to_submit&quot;, &#xd;
+	&quot;version&quot;: 2 &#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">content-type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Authorization</stringProp>
+                <stringProp name="Header.value">Bearer ${accessToken}</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49586">200</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Update Report Status - submitted - HTTP Request">
+          <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
+          <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
+          <stringProp name="HTTPSampler.path">/v1/organisations/${organisationId}/registrations/${registrationId}/reports/2026/monthly/3/status</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{ &#xd;
+	&quot;status&quot;: &quot;submitted&quot;, &#xd;
+	&quot;version&quot;: 3 &#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">content-type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Authorization</stringProp>
+                <stringProp name="Header.value">Bearer ${accessToken}</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49586">200</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Retrieve Report HTTP Request">
+          <stringProp name="HTTPSampler.domain">${EPR_BACKEND_HOST}</stringProp>
+          <stringProp name="HTTPSampler.port">${EPR_BACKEND_PORT}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${HTTP_PROTOCOL}</stringProp>
+          <stringProp name="HTTPSampler.path">/v1/organisations/${organisationId}/registrations/${registrationId}/reports/2026/monthly/3</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">content-type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Authorization</stringProp>
+                <stringProp name="Header.value">Bearer ${accessToken}</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49586">200</stringProp>
             </collectionProp>
             <stringProp name="Assertion.custom_message"></stringProp>
             <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
